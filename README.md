@@ -55,6 +55,7 @@ Context Menu for directory when any file selected
 
 Addition function for directory when any clipboard content
 * Paste File
+* Empty Clipboard
  
 ### File
 #### Text File
