@@ -1,5 +1,5 @@
 <IfModule mod_rewrite.c>
 RewriteEngine on
 #RewriteRule ^(.*)$  ../../content/$1 [L,NC,QSA]
-RewriteRule ^(.*)$  ../tool-download-file.php?relative=true&filepath=$1 [L,NC,QSA]
+#RewriteRule ^(.*)$  ../tool-download-file.php?relative=true&filepath=$1 [L,NC,QSA]
 </IfModule>
