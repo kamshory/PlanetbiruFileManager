@@ -1,0 +1,107 @@
+/*
+** Copyright Kamshory Developer 2010-2013 
+** All rights reserved
+** Join Planet Biru http://www.planetbiru.com
+*/
+@charset "utf-8";
+body{
+background-color:#FFFFFF;
+margin:0px;
+padding:0px;
+font-family:Arial, Helvetica, sans-serif;
+font-size:13px;
+color:#555555;
+}
+form{
+margin:0px;
+padding:0px;
+}
+input, select, textarea{
+margin:0px;
+}
+a{
+color:#2C70A0;
+text-decoration:none;
+}
+a:hover{
+text-decoration:underline;
+}
+.box{
+width:372px;
+margin:40px auto 0px auto;
+border-radius:9px;
+-moz-border-radius:9px;
+-webkit-border-radius:9px;
+box-shadow:0px 0px 3px #E4E4E4;
+-moz-box-shadow:0px 0px 3px #E4E4E4;
+-webkit-box-shadow:0px 0px 3px #E4E4E4;
+}
+.box-title{
+background-color:#3679AF;
+background-image:-webkit-gradient(linear,left top,left bottom,from(#3679AF),to(#276B9A));
+background-image:-webkit-linear-gradient(#3679AF,#276B9A);
+background-image:-moz-linear-gradient(#3679AF,#276B9A);
+background-image:-ms-linear-gradient(#3679AF,#276B9A);
+background-image:-o-linear-gradient(#3679AF,#276B9A);
+background-image:linear-gradient(#3679AF,#276B9A);
+padding:8px 20px 8px 20px;
+font-weight:bold;
+font-size:21px;
+color:#FFFFFF;
+border-top-left-radius:8px;
+-moz-border-radius-topleft:8px;
+-webkit-border-top-left-radius:8px;
+border-top-right-radius:8px;
+-moz-border-radius-topright:8px;
+-webkit-border-top-right-radius:8px;
+}
+.version{
+	font-size:16px;
+}
+.box-form{
+background-color:#F4F7FF;
+padding:18px 20px 20px 20px;
+border:solid #CCCCCC;
+border-width:0px 1px 1px 1px;
+border-bottom-left-radius:8px;
+-moz-border-radius-bottomleft:8px;
+-webkit-border-bottom-left-radius:8px;
+border-bottom-right-radius:8px;
+-moz-border-radius-bottomright:8px;
+-webkit-border-bottom-right-radius:8px;
+}
+.field{
+padding:3px 0px;
+}
+.input-text-login{
+padding:4px;
+font-size:16px;
+border:1px solid #DDDDDD;
+background-color:#FFFFFF;
+width:320px;
+border-radius:2px;
+-moz-border-radius:2px;
+-webkit-border-radius:2px;
+color:#444444;
+}
+.button-area{
+padding-top:4px;
+}
+.login-button{
+padding:4px 16px;
+background-color:#3E80B6;
+color:#FFFFFF;
+font-size:14px;
+border:1px solid;
+border-color:#4A8CC1 #3671A0 #3671A0 #4A8CC1;
+border-radius:2px;
+-moz-border-radius:2px;
+-webkit-border-radius:2px;
+}
+.footer{
+width:372px;
+margin:30px auto 0px auto;
+text-align:center;
+color:#777777;
+font-size:11px;
+}

@@ -1,0 +1,17 @@
+Options -Indexes
+
+
+<IfModule mod_rewrite.c>
+RewriteEngine on
+
+RewriteRule forcedownload/(.*)$  tool-download-file.php?filepath=$1 [L,NC,QSA]
+
+
+
+</IfModule>
+
+<FilesMatch "data\/.*\.php">
+Order allow,deny
+Deny from all
+</FilesMatch>
+

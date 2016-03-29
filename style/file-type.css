@@ -1,0 +1,133 @@
+/*
+** Copyright Kamshory Developer 2010-2013 
+** All rights reserved
+** Join Planet Biru http://www.planetbiru.com
+*/
+@charset "utf-8";
+.fileicon{background-image:url(images/filetype/unknown.gif);
+background-position:0px 0px;
+background-repeat:no-repeat;
+}
+
+.fileicon-avi, .fileicon-3gp, .fileicon-mpg, .fileicon-mpeg, .fileicon-mp4, .fileicon-wmv, .fileicon-ram, .fileicon-dat, .fileicon-mov, .fileicon-rm, .fileicon-flv, .fileicon-ogg, .fileicon-mkv{background-image:url(images/filetype/video.gif);}
+.fileicon-c{background-image:url(images/filetype/c.gif);}
+.fileicon-cpp{background-image:url(images/filetype/cpp.gif);}
+.fileicon-css{background-image:url(images/filetype/css.gif);}
+.fileicon-dir{background-image:url(images/filetype/folder.gif);}
+.fileicon-dmg{background-image:url(images/filetype/dmg.gif);}
+.fileicon-docm{background-image:url(images/filetype/docm.gif);}
+.fileicon-doc{background-image:url(images/filetype/word.gif);}
+.fileicon-docx{background-image:url(images/filetype/docx.gif);}
+.fileicon-dotm{background-image:url(images/filetype/dotm.gif);}
+.fileicon-dotx{background-image:url(images/filetype/dotx.gif);}
+.fileicon-edit{background-image:url(images/filetype/edit.gif);}
+.fileicon-env{background-image:url(images/filetype/env.gif);}
+.fileicon-html, .fileicon-htm{background-image:url(images/filetype/html.gif);}
+.fileicon-ini, .fileicon-htaccess{background-image:url(images/filetype/ini.gif);}
+.fileicon-isf{background-image:url(images/filetype/isf.gif);}
+.fileicon-jbc{background-image:url(images/filetype/jbc.gif);}
+.fileicon-jcl{background-image:url(images/filetype/jcl.gif);}
+.fileicon-jcw{background-image:url(images/filetype/jcw.gif);}
+.fileicon-jmt{background-image:url(images/filetype/jmt.gif);}
+.fileicon-jmx{background-image:url(images/filetype/jmx.gif);}
+.fileicon-jpeg, .fileicon-jpg, .fileicon-png, .fileicon-gif, .fileicon-bmp, .fileicon-cdr, .fileicon-ico, .fileicon-psd{background-image:url(images/filetype/image.gif);}
+.fileicon-jqz{background-image:url(images/filetype/jqz.gif);}
+.fileicon-js{background-image:url(images/filetype/js.gif);}
+.fileicon-mdb{background-image:url(images/filetype/mdb.gif);}
+.fileicon-accdb{background-image:url(images/filetype/accdb.gif);}
+.fileicon-move{background-image:url(images/filetype/move.gif);}
+.fileicon-mp3, .fileicon-wav, .fileicon-ram, .fileicon-wma{background-image:url(images/filetype/audio.gif);}
+.fileicon-odb{background-image:url(images/filetype/odb.gif);}
+.fileicon-odc{background-image:url(images/filetype/odc.gif);}
+.fileicon-odf{background-image:url(images/filetype/odf.gif);}
+.fileicon-odg{background-image:url(images/filetype/odg.gif);}
+.fileicon-odi{background-image:url(images/filetype/odi.gif);}
+.fileicon-odm{background-image:url(images/filetype/odm.gif);}
+.fileicon-odp{background-image:url(images/filetype/odp.gif);}
+.fileicon-ods{background-image:url(images/filetype/ods.gif);}
+.fileicon-odt{background-image:url(images/filetype/odt.gif);}
+.fileicon-pdf{background-image:url(images/filetype/pdf.gif);}
+.fileicon-php{background-image:url(images/filetype/php.gif);}
+.fileicon-potm{background-image:url(images/filetype/potm.gif);}
+.fileicon-potx{background-image:url(images/filetype/potx.gif);}
+.fileicon-ppam{background-image:url(images/filetype/ppam.gif);}
+.fileicon-ppsm{background-image:url(images/filetype/ppsm.gif);}
+.fileicon-ppsx{background-image:url(images/filetype/ppsx.gif);}
+.fileicon-pptm{background-image:url(images/filetype/pptm.gif);}
+.fileicon-swf{background-image:url(images/filetype/swf.gif);}
+.fileicon-pptx, .fileicon-ppt{background-image:url(images/filetype/pptx.gif);}
+.fileicon-text, .fileicon-txt{background-image:url(images/filetype/text.gif);}
+.fileicon-xlam{background-image:url(images/filetype/xlam.gif);}
+.fileicon-xls{background-image:url(images/filetype/xls.gif);}
+.fileicon-xlsb{background-image:url(images/filetype/xlsb.gif);}
+.fileicon-xlsm{background-image:url(images/filetype/xlsm.gif);}
+.fileicon-xlsx{background-image:url(images/filetype/xlsx.gif);}
+.fileicon-xltm{background-image:url(images/filetype/xltm.gif);}
+.fileicon-xltx{background-image:url(images/filetype/xltx.gif);}
+.fileicon-xml{background-image:url(images/filetype/xml.gif);}
+.fileicon-zip{background-image:url(images/filetype/zip.gif);}
+
+.thumbdir .thumbimage{
+background:url(images/common/folder.png) center center no-repeat;
+}
+.thumbfile .thumbimage{
+background:url(images/common/documents.png) center center no-repeat;
+}
+.thumbfile-html .thumbimage{
+background:url(images/common/html.png) no-repeat;
+}
+.thumbfile-mp3 .thumbimage, .thumbfile-wav .thumbimage, .thumbfile-ram .thumbimage, .thumbfile-wma .thumbimage{
+background:url(images/common/audio.png) no-repeat;
+}
+.thumbfile-ogg .thumbimage, .thumbfile-mp4 .thumbimage, .thumbfile-3gp.thumbimage, .thumbfile-avi .thumbimage, .thumbfile-flv .thumbimage, .thumbfile-mkv .thumbimage, .thumbfile-rm .thumbimage, .thumbfile-mpg .thumbimage, .thumbfile-mpeg .thumbimage, .thumbfile-wmv .thumbimage{
+background:url(images/common/video.png) no-repeat;
+}
+.thumbfile-txt .thumbimage{
+background:url(images/common/text.png) no-repeat;
+}
+.thumbfile-php .thumbimage{
+background:url(images/common/php.png) no-repeat;
+}
+.thumbfile-mdb .thumbimage{
+background:url(images/common/mdb.png) no-repeat;
+}
+.thumbfile-ini .thumbimage{
+background:url(images/common/ini.png) no-repeat;
+}
+.thumbfile-pdf .thumbimage{
+background:url(images/common/pdf.png) no-repeat;
+}
+.thumbfile-zip .thumbimage{
+background:url(images/common/zip.png) no-repeat;
+}
+.thumbfile-docx .thumbimage{
+background:url(images/common/docx.png) no-repeat;
+}
+.thumbfile-ini .thumbimage, .thumbfile-conf .thumbimage, .thumbfile-htaccess .thumbimage{
+background:url(images/common/ini.png) no-repeat;
+}
+.thumbfile-doc .thumbimage{
+background:url(images/common/word.png) no-repeat;
+}
+.thumbfile-ppt .thumbimage{
+background:url(images/common/ppt.png) no-repeat;
+}
+.thumbfile-pptx .thumbimage{
+background:url(images/common/pptx.png) no-repeat;
+}
+.thumbfile-swf .thumbimage{
+background:url(images/common/flash.png) no-repeat;
+}
+.thumbfile-psd .thumbimage{
+background:url(images/common/psd.png) no-repeat;
+}
+.thumbfile-xls .thumbimage{
+background:url(images/common/xls.png) no-repeat;
+}
+.thumbfile-xlsx .thumbimage{
+background:url(images/common/xlsx.png) no-repeat;
+}
+.thumbfile-jpg .thumbimage, .thumbfile-jpeg .thumbimage, .thumbfile-png .thumbimage, .thumbfile-gif .thumbimage{
+background:url(images/common/image.png) no-repeat center center;
+}
+
