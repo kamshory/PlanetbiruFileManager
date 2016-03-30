@@ -1172,5 +1172,4 @@ function matchUser($user, $username, $password)
 	}
 	return false;
 }
-
 ?>
