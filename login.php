@@ -14,7 +14,8 @@ if($_POST['username'] && $_POST['password'])
 	{
 		foreach($cfg->users as $user)
 		{
-			if(matchUser($user, $uid, $pas))
+			$match = matchUser($user, $uid, $pas);
+			if($match)
 			{
 				$userid = $user[0];
 				break;
@@ -23,10 +24,26 @@ if($_POST['username'] && $_POST['password'])
 		if($userid)
 		{
 			$_SESSION['userid'] = $userid;
-			if($_POST['ref'])
-			header("Location: $res");
+			if(strlen(@$_POST['ref']))
+			{
+				$ref = @$_POST['ref'];
+				header("Location: $ref");
+				exit();
+			}
 			else
-			header("Location: ./");
+			{
+				header("Location: ./");
+				exit();
+			}
+		}
+		else
+		{
+			if(strlen(@$_POST['ref']))
+			{
+				$ref = $_POST['ref'];
+				header("Location: $ref");
+				exit();
+			}
 		}
 	}
 }
