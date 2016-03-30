@@ -24,7 +24,7 @@
         </div>
         <div class="clear"></div>
         <div class="field">
-        <div class="button-area"><input type="hidden" name="ref" id="ref" value="<?php echo strip_tags($_SERVER['REQUEST_URI']);?>" />
+        <div class="button-area"><input type="hidden" name="ref" id="ref" value="<?php echo htmlspecialchars(strip_tags($_SERVER['REQUEST_URI']));?>" />
         <input type="submit" name="login" id="login" value="Login" class="login-button" />
         </div>
         <div class="clear"></div>
