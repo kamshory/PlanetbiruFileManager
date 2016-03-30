@@ -60,7 +60,7 @@ if(strlen(@$cfg->rootdir))
 
 
 $cfg->users = array(
-	array("kamshory", "j4n94nk451ht4u0r4n9", "plain"),
+	array("kamshory", "kamshory", "plain"),
 	array("masroy", "indonesia", "plain")
 );
 /*
