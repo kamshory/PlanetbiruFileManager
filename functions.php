@@ -611,6 +611,7 @@ $arr = array(
 'm14'=>'application/x-msmediaview',
 'm3u'=>'audio/x-mpegurl',
 'man'=>'application/x-troff-man',
+'md'=>'text/markdown',
 'mdb'=>'application/x-msaccess',
 'me'=>'application/x-troff-me',
 'mht'=>'message/rfc822',
