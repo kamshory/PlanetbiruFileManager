@@ -1,7 +1,7 @@
 /*
-** Copyright Kamshory Developer 2010-2013 
+** Copyright Kamshory Developer 2010-2016 
 ** All rights reserved
-** Join Planet Biru http://www.planetbiru.com
+** Join Planetbiru http://www.planetbiru.com
 */
 var angle = 0;
 var fliph = 0;
