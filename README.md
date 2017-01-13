@@ -1,6 +1,6 @@
 # PlanetbiruFileManager
 
-Planetbiru File Manager is a web-based file manager using the PHP language that can be integrated with a variety of programs for managing files on the server. Planetbiru File Manager has a lot of very useful functions to create a new file, upload, edit, delete, move, rename, compress, extract, and so on. You can also drag and drop files from local storage to file area to upload them.
+Planetbiru File Manager is a web-based file manager using the PHP language that can be integrated with a variety of programs for managing files on the server. Planetbiru File Manager has a lot of very useful functions to create a new file, upload, edit, delete, move, rename, compress, extract, and so on. You can also drag and drop files from local storage to file area to upload them. Planetbiru File Manager can run without any database. 
 
 ## Functions
 * Create New File
