@@ -5,10 +5,11 @@ include_once dirname(__FILE__)."/conf.php";
 include_once dirname(__FILE__)."/functions.php";
 
 
-if($_POST['username'] && $_POST['password'])
+if(isset($_POST['username']) && isset($_POST['password']))
 {
-	$uid = addslashes($_POST['username']);
-	$pas = addslashes($_POST['password']);
+	// TODO You need to filter this input if you use database to store user credentials
+	$uid = trim($_POST['username']);
+	$pas = trim($_POST['password']);
 	$userid = "";
 	if(is_array($cfg->users))
 	{

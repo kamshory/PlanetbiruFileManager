@@ -1146,31 +1146,30 @@ function get_capture_info($exif)
 	}
 	return null;
 }
-
-function matchUser($user, $username, $password)
+function crypt_sha1($password)
 {
-	$passwordType = $user[2];
+	return "{SHA}".base64_encode(hex2bin(sha1($password)));
+}
+
+function matchUser($user, $username, $passwordInput)
+{
+	$ret = false;
+	$passwordType = '';
+	
+	if(stripos($user[1], '{SHA}') === 0)
+	{
+		$passwordType  = 'SHA1';
+	}
 	switch($passwordType)
 	{
-		case 'plain':
+		case 'SHA1':
+		$password = crypt_sha1($passwordInput);
 		if($username == $user[0] && $password == $user[1])
 		{
-			return true;
-		}
-		break;
-		case 'md5':
-		if($username == $user[0] && md5($password) == $user[1])
-		{
-			return true;
-		}
-		break;
-		case 'sha1':
-		if($username == $user[0] && sha1($password) == $user[1])
-		{
-			return true;
+			$ret = true;
 		}
 		break;
 	}
-	return false;
+	return $ret;
 }
 ?>

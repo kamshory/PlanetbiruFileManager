@@ -101,7 +101,7 @@ background-color:#F6F6F6;
 border-bottom:1px solid #DDDDDD;
 }
 .input-text{
-padding:3px;
+padding:8px 12px;
 font-family:Tahoma, Geneva, sans-serif;
 font-size:12px;
 color:#444444;
@@ -112,10 +112,20 @@ box-shadow:0px 0px 1px #DDDDDD;
 -webkit-box-shadow:0px 0px 1px #DDDDDD;
 width:240px;
 }
-.address{
-	width:100%;
+.address-bar tr td:nth-child(2){
+	width:100px;
+}
+.address-bar .address{
+	width:calc(100% - 6px);
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+}
+.address-bar tr td:nth-child(2){
+	width:80px;
+}
+.address-bar .com-button{
+	width:100%;
 	box-sizing:border-box;
 }
 .kamsfilemanager select{
@@ -135,6 +145,7 @@ width:40px;
 .input-text-medium{
 width:60px;
 }
+
 .rep a, .ui-widget-content .ui-dialog-buttonset button, .ui-widget-content .dialog-button-area button, 
 .button-search, .ui-widget-content .dialog-button-area input, .com-button{
 -moz-border-radius:2px;
@@ -145,9 +156,15 @@ font-size:12px;
 border:1px solid #BBBBBB;
 background:#EEEEEE url(images/button4.png) no-repeat left center;
 color:#555555;
-padding:2px 10px;
 text-decoration:none;
 }
+.rep a, .button-search, .com-button, .ui-widget-content .dialog-button-area input{
+padding:8px 16px;
+}
+.ui-widget-content .ui-dialog-buttonset button, .ui-widget-content .dialog-button-area button{
+padding:6px 16px;
+}
+
 .ui-dialog-buttonset button:hover, .dialog-button-area button:hover, .button-search:hover, .dialog-button-area input:hover, .com-button:hover, 
 .ui-dialog-buttonset button:focus, .dialog-button-area button:focus, .button-search:focus, .dialog-button-area input:focus, .com-button:focus{
 border:1px solid #6D8D9E;
@@ -186,18 +203,12 @@ box-shadow:0px 0px 1px #DDDDDD;
 }
 .file-table thead td{
 background-color:#437AA3;
-background-image:-webkit-gradient(linear,left top,left bottom,from(#437AA3),to(#3E7095));
-background-image:-webkit-linear-gradient(#437AA3,#3E7095);
-background-image:-moz-linear-gradient(#437AA3,#3E7095);
-background-image:-ms-linear-gradient(#437AA3,#3E7095);
-background-image:-o-linear-gradient(#437AA3,#3E7095);
-background-image:linear-gradient(#437AA3,#3E7095);
 border-bottom:1px solid #DDDDDD;
-padding:5px 4px;
+padding:6px 10px;
 color:#FFFFFF;
 }
 .file-table tbody td{
-padding:3px 4px;
+padding:6px 10px;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
@@ -271,16 +282,16 @@ text-decoration:none;
 color:#444444;
 }
 #directory-container .basedir ul li > a{
-background:url(images/folder.gif) no-repeat 1px 0px;
+background:url(images/folder.gif) no-repeat 1px 4px;
 display:block;
 white-space:nowrap;
-padding:1px 0px 1px 20px;
+padding:3px 0px 3px 20px;
 text-decoration:none;
 color:#444444;
-line-height:1.4;
+line-height:1.45;
 }
 #directory-container .basedir ul li.dir-open > a{
-background:url(images/folder-open.gif) no-repeat 1px 0px;
+background:url(images/folder-open.gif) no-repeat 1px 4px;
 }
 #directory-container ul li ul{
 margin-left:18px;

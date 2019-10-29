@@ -273,7 +273,7 @@ function setSize(){
 var wh = parseInt($(window).height());
 var ww = parseInt($(window).width());
 var sw = parseInt($('.directory-area').outerWidth())+20;
-$('.directory-area, .file-area').css('height', (wh-84)+'px');
+$('.directory-area, .file-area').css('height', (wh-92)+'px');
 $('.file-area').css({'width': (ww-sw)+'px', 'margin-left':(sw-14)+'px'});
 }
 

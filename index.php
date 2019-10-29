@@ -135,12 +135,12 @@ function selectFileIndex(url){
 
 <div class="addressbar">
 <form name="dirform" method="get" enctype="multipart/form-data" action="" onSubmit="return openDir()">
-<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<table class="address-bar" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td>
 <input type="text" class="input-text address" name="address" id="address" value="<?php echo $dir;?>" autocomplete="off" />
 </td>
-<td width="64" align="right">
+<td>
 <input type="submit" name="opendir" id="opendir" class="com-button" value="Open" />
 </td>
 </tr>
