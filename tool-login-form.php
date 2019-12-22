@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Kams File Manager</title>
+<title>Planetbiru File Manager</title>
 <link rel="shortcut icon" href="../static/images/16x16.png" type="image/jpeg" />
 <link rel="stylesheet" type="text/css" href="style/login.css" />
 </head>
@@ -10,7 +10,7 @@
 <div class="all">
 <div class="box">
 	<div class="box-inner">
-        <div class="box-title">Kams File Manager</div>
+        <div class="box-title">Planetbiru File Manager</div>
         <div class="box-form">
         <form id="form1" name="form1" method="post" action="login.php">
         <div class="label">Username</div>
@@ -34,7 +34,7 @@
     </div>
 </div>
 <div class="footer">
- &copy; <a href="http://www.kamshory.com">Kamshory Developer</a> 2010-2016. All rights reserved. </div>
+ &copy; <a href="http://www.planetbiru.net">Planetbiru Studio</a> 2010-<?php echo date('Y');?>. All rights reserved.</div>
 </div>
 </body>
 </html>
