@@ -59,24 +59,17 @@ if(strlen(@$cfg->rootdir))
 }
 
 
-$cfg->users = array(
-	array("kamshory", "{SHA}PUkSovNmiq8EkRemJdSniuPfezM="),
-	array("masroy", "{SHA}+Zrs7z0S4C3LtiYLvdNRiciebnM=")
-);
+$cfg->users = '';
 
 if(file_exists(dirname(__FILE__)."/.htpasswd"))
 {
 	$cfg->users = array();
 	$row = file(dirname(__FILE__)."/.htpasswd");
-	foreach($row as $line)
+	foreach($row as $idx=>$line)
 	{
-		$line = trim($line, " \r\n\t ");
-		if(strlen($line) > 0)
-		{
-			$arr = explode(":", $line);
-			$cfg->users[] = $arr;
-		}
+		$row[$idx] = trim($line, " \r\n\t ");
 	}
+	$cfg->users = implode("\r\n", $row);
 }
 /*
 0 = username

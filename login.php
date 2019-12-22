@@ -11,16 +11,11 @@ if(isset($_POST['username']) && isset($_POST['password']))
 	$uid = trim($_POST['username']);
 	$pas = trim($_POST['password']);
 	$userid = "";
-	if(is_array($cfg->users))
+	if(strlen($cfg->users))
 	{
-		foreach($cfg->users as $user)
+		if(HTPasswd::auth($uid, $pas, $cfg->users))
 		{
-			$match = matchUser($user, $uid, $pas);
-			if($match)
-			{
-				$userid = $user[0];
-				break;
-			}
+			$userid = $uid;
 		}
 		if($userid)
 		{

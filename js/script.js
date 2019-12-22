@@ -1774,7 +1774,7 @@ function transferFile()
 		modal:true,
 		title:'Transfer File',
 		width:400,
-		height:200,
+		height:240,
 		'buttons':{
 			'Get File':function(){
 				var sourcefile = $('#source').val();
