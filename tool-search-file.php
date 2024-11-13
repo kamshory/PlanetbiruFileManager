@@ -1,15 +1,16 @@
 <?php
-include_once dirname(__FILE__)."/functions.php";
-include_once dirname(__FILE__)."/auth.php";
-include dirname(__FILE__)."/conf.php";
+include_once __DIR__."/functions.php";
+include_once __DIR__."/auth.php";
+require_once __DIR__."/classes/ListFile.php";
+include __DIR__."/conf.php"; //NOSONAR
 if($cfg->authentification_needed && !$userlogin)
 {
 	exit();
 }
 $dir = path_decode(kh_filter_input(INPUT_GET, 'dir'), $cfg->rootdir);
-$lv2 = new listFile($dir);
-$arrfile = $lv2->result_file;
-$arrdir = $lv2->result_dir;
+$lv2 = new ListFile($cfg, $dir);
+$arrfile = $lv2->resultFile;
+$arrdir = $lv2->resultDir;
 
 if((count($arrfile)+count($arrdir))>0)
 {

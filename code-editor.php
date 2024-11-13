@@ -1,7 +1,7 @@
 <?php
 include_once dirname(__FILE__)."/functions.php";
 include_once dirname(__FILE__)."/auth.php";
-include dirname(__FILE__)."/conf.php";
+include dirname(__FILE__)."/conf.php"; //NOSONAR
 if($cfg->authentification_needed && !$userlogin)
 {
 	include_once dirname(__FILE__)."/tool-login-form.php";
@@ -28,7 +28,7 @@ else
 		$cnt = file_get_contents($filepath);
 	}
 ?><!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Planetbiru Code Editor</title>

@@ -1,9 +1,9 @@
 <?php
-include_once dirname(__FILE__)."/functions.php";
-include dirname(__FILE__)."/auth.php";
+include_once __DIR__."/functions.php";
+include __DIR__."/auth.php";
 if($cfg->authentification_needed && !$userlogin)
 {
-	include_once dirname(__FILE__)."/tool-login-form.php";
+	include_once __DIR__."/tool-login-form.php";
 	exit();
 }
 
@@ -12,9 +12,12 @@ if(!is_dir(path_decode($dir, $cfg->rootdir))){
 	$dir = '';	
 }
 
-if(!$dir) $dir =  'base';
+if(!$dir) 
+{
+  $dir =  'base';
+}
 ?><!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Planetbiru File Manager</title>
@@ -155,7 +158,7 @@ function selectFileIndex(url){
             <li class="basedir dir-control" data-file-name="base" data-file-location="">
             <a href="javascript:;" onClick="return openDir('base')">base</a>
 			  <?php 
-              include_once dirname(__FILE__)."/tool-load-dir.php";
+              include_once __DIR__."/tool-load-dir.php";
               ?>
             </li>
             </ul>
@@ -165,7 +168,7 @@ function selectFileIndex(url){
     <div class="file-area">
     	<div id="file-container">
     	  <?php 
-		  include_once dirname(__FILE__)."/tool-load-file.php";
+		  include_once __DIR__."/tool-load-file.php";
 		  ?>
     	</div>
     </div>

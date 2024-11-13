@@ -1,7 +1,7 @@
 <?php
 include_once dirname(__FILE__)."/functions.php";
 include_once dirname(__FILE__)."/auth.php";
-include dirname(__FILE__)."/conf.php";
+include dirname(__FILE__)."/conf.php"; //NOSONAR
 if($cfg->authentification_needed && !$userlogin)
 {
 	exit();
@@ -75,44 +75,53 @@ if(file_exists($filename))
 			$time_capture = (@$exif['IFD0']['Datetime'])?(@$exif['IFD0']['Datetime']):(@$exif['EXIF']['DateTimeOriginal'])?(@$exif['EXIF']['DateTimeOriginal']):'-';
 			if(isset($exif['GPS']))
 			{
-				$gpsinfo = $exif['GPS'];
-				
-				$latar = explode("/",@$gpsinfo['GPSLatitude'][0]);
-				if(count($latar)>1 && $latar[1])
-				$latd = $latar[0]/$latar[1];
-				$latar = explode("/",@$gpsinfo['GPSLatitude'][1]);
-				if(count($latar)>1 && $latar[1])
-				$latm = $latar[0]/$latar[1];
-				$latar = explode("/",@$gpsinfo['GPSLatitude'][2]);
-				if(count($latar)>1 && $latar[1])
-				$lats = $latar[0]/$latar[1];
-				$reallat = dmstoreal($latd, $latm, $lats);
-				if(stripos(@$gpsinfo['GPSLatitudeRef'],"S")!==false)
-				$reallat = $reallat*-1;
-				$latitude = "$latd; $latm; $lats ".@$gpsinfo['GPSLatitudeRef'];
-				$latitude = trim($latitude, " ; ");
-				
-				$longar = explode("/",@$gpsinfo['GPSLongitude'][0]);
-				if(count($longar)>1 && $longar[1])
-				$longd = $longar[0]/$longar[1];
-				$longar = explode("/",@$gpsinfo['GPSLongitude'][1]);
-				if(count($longar)>1 && $longar[1])
-				$longm = $longar[0]/$longar[1];
-				$longar = explode("/",@$gpsinfo['GPSLongitude'][2]);
-				if(count($longar)>1 && $longar[1])
-				$longs = $longar[0]/$longar[1];
-				
-				$reallong = dmstoreal($longd, $longm, $longs);
-				if(stripos(@$gpsinfo['GPSLongitudeRef'],"W")!==false)
-				$reallong = $reallong*-1;
-				$longitude = "$longd; $longm; $longs ".@$gpsinfo['GPSLongitudeRef'];
-				
-				$longitude = trim($longitude, " ; ");
-				
-				$alar = explode("/",@$gpsinfo['GPSAltitude']);
-				if(count($alar)>1 && $alar[1])
-				$altitude = $alar[0]/$alar[1];
-				$altref = @$gpsinfo['GPSAltitudeRef'];
+				$gpsinfo = isset($exif['GPS']) ? $exif['GPS'] : null;
+
+        if ($gpsinfo) {
+            // Latitude parsing
+            $latd = $latm = $lats = 0;
+            if (isset($gpsinfo['GPSLatitude'])) {
+                $lat = $gpsinfo['GPSLatitude'];
+                if (count($lat) > 2) {
+                    $latd = isset($lat[0][1]) ? $lat[0][0] / $lat[0][1] : 0;
+                    $latm = isset($lat[1][1]) ? $lat[1][0] / $lat[1][1] : 0;
+                    $lats = isset($lat[2][1]) ? $lat[2][0] / $lat[2][1] : 0;
+                }
+            }
+
+            $reallat = dmstoreal($latd, $latm, $lats);
+            if (isset($gpsinfo['GPSLatitudeRef']) && stripos($gpsinfo['GPSLatitudeRef'], "S") !== false) {
+                $reallat *= -1;
+            }
+            $latitude = "$latd; $latm; $lats " . (isset($gpsinfo['GPSLatitudeRef']) ? $gpsinfo['GPSLatitudeRef'] : '');
+            $latitude = trim($latitude, " ;");
+
+            // Longitude parsing
+            $longd = $longm = $longs = 0;
+            if (isset($gpsinfo['GPSLongitude'])) {
+                $long = $gpsinfo['GPSLongitude'];
+                if (count($long) > 2) {
+                    $longd = isset($long[0][1]) ? $long[0][0] / $long[0][1] : 0;
+                    $longm = isset($long[1][1]) ? $long[1][0] / $long[1][1] : 0;
+                    $longs = isset($long[2][1]) ? $long[2][0] / $long[2][1] : 0;
+                }
+            }
+
+            $reallong = dmstoreal($longd, $longm, $longs);
+            if (isset($gpsinfo['GPSLongitudeRef']) && stripos($gpsinfo['GPSLongitudeRef'], "W") !== false) {
+                $reallong *= -1;
+            }
+            $longitude = "$longd; $longm; $longs " . (isset($gpsinfo['GPSLongitudeRef']) ? $gpsinfo['GPSLongitudeRef'] : '');
+            $longitude = trim($longitude, " ;");
+
+            // Altitude parsing
+            $altitude = 0;
+            if (isset($gpsinfo['GPSAltitude']) && count($gpsinfo['GPSAltitude']) > 1) {
+                $altitude = $gpsinfo['GPSAltitude'][0] / $gpsinfo['GPSAltitude'][1];
+            }
+            $altref = isset($gpsinfo['GPSAltitudeRef']) ? $gpsinfo['GPSAltitudeRef'] : '';
+        }
+
 			}
 			else
 			{

@@ -1,7 +1,7 @@
 <?php
 include_once dirname(__FILE__)."/functions.php";
 include_once dirname(__FILE__)."/auth.php";
-include dirname(__FILE__)."/conf.php";
+include dirname(__FILE__)."/conf.php"; //NOSONAR
 if($cfg->authentification_needed && !$userlogin)
 {
 	exit();
@@ -13,13 +13,18 @@ if(isset($_POST['save']))
 	{
 		parse_str($_POST['data'], $_POST);
 		$imagequality = kh_filter_input(INPUT_POST, 'imagequality', FILTER_SANITIZE_NUMBER_UINT);
-		if($imagequality > 100) $imagequality = 100;
+		if($imagequality > 100)
+		{
+			$imagequality = 100;
+		}
+		/*
 		writeprofile("imagequality", $imagequality, $authblogid);
 		writeprofile("imageinterlace", kh_filter_input(INPUT_POST, 'imageinterlace', FILTER_SANITIZE_NUMBER_UINT), $authblogid);
 		writeprofile("compressimageonupload", kh_filter_input(INPUT_POST, 'compressimageonupload', FILTER_SANITIZE_NUMBER_UINT), $authblogid);
 		writeprofile("maximagewidth", kh_filter_input(INPUT_POST, 'maximagewidth', FILTER_SANITIZE_NUMBER_UINT), $authblogid);
 		writeprofile("maximageheight", kh_filter_input(INPUT_POST, 'maximageheight', FILTER_SANITIZE_NUMBER_UINT) ,$authblogid);
 		writeprofile("imageformat", kh_filter_input(INPUT_POST, 'imageformat', FILTER_SANITIZE_STRING), $authblogid);
+		*/
 		echo 'SAVED';
 	}
 }

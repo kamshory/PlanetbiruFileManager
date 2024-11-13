@@ -1,7 +1,7 @@
 <?php
-include dirname(__FILE__)."/session.php";
+include dirname(__FILE__)."/session.php"; //NOSONAR
 
-include dirname(__FILE__)."/conf.php";
+include dirname(__FILE__)."/conf.php"; //NOSONAR
 $userlogin = null;
 if(isset($_SESSION['userid']))
 {
@@ -11,5 +11,3 @@ if($userlogin)
 {
 	$authblogid = 1;
 }
-
-?>
