@@ -73,7 +73,7 @@ if(count($arrdir))
 foreach($arrdir as $k=>$val)
 {
 ?>
-<li class="row-data-dir dir-control" data-file-name="<?php echo $val['name'];?>" data-file-location="<?php echo $val['location'];?>" data-file-path="<?php echo str_replace("'", "\'", $val['path']);?>"><a href="javascript:;" onClick="return openDir('<?php echo str_replace("'", "\'", $val['path']);?>')"><?php echo $val['name'];?></a>
+<li class="row-data-dir dir-control" data-file-name="<?php echo $val['name'];?>" data-file-location="<?php echo $val['location'];?>" data-file-path="<?php echo str_replace("'", "\'", $val['path']);?>"><a href="javascript:;" onclick="return openDir('<?php echo str_replace("'", "\'", $val['path']);?>')"><?php echo $val['name'];?></a>
 <?php
 if($val['location'] && stripos($seldir, $val['path']) !== false)
 {
