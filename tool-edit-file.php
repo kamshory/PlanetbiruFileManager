@@ -46,10 +46,8 @@ if (@$_GET['option'] == 'savefile' && isset($_POST['filepath'])) {
 		$d2c = "";
 		foreach ($arr as $k => $v) {
 			$d2c .= $v;
-			if (strlen($d2c) >= strlen($cfg->rootdir)) {
-				if (!file_exists($d2c)) {
-					mkdir($d2c);
-				}
+			if (strlen($d2c) >= strlen($cfg->rootdir) && !file_exists($d2c)) {
+				mkdir($d2c);
 			}
 			$d2c .= "/";
 		}

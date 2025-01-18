@@ -117,17 +117,14 @@ if (strlen($error_code)) {
     </form>
     <div class="image-editor-middle">
       <?php
-      switch ($error_code) {
-        case "NOT_IMAGE":
+      if ($error_code == "NOT_IMAGE") {
           echo "This file has not valid image format.";
-          break;
-        case "NOT_FILE":
+      } elseif ($error_code == "NOT_FILE") {
           echo "The path you type is not a file.";
-          break;
-        case "NOT_FOUND":
+      } elseif ($error_code == "NOT_FOUND") {
           echo "File not found. Be sure that you type correct path of file.";
-          break;
       }
+    
       ?>
 
     </div>

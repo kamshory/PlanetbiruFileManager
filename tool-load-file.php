@@ -6,10 +6,9 @@ if ($cfg->authentification_needed && !$userlogin) {
 	exit();
 }
 
-if (@$cfg->thumbnail_on_load) {
-	if (@$_COOKIE['togglethumb'] == 1) {
-		$_GET['thumbnail'] = 1;
-	}
+if (@$cfg->thumbnail_on_load && @$_COOKIE['togglethumb'] == 1) {
+	$_GET['thumbnail'] = 1;
+	
 }
 
 
@@ -19,73 +18,72 @@ if (!is_dir($dir2)) {
 }
 $arrfile = array();
 $arrdir = array();
-if (file_exists($dir2)) {
-	if ($handle = opendir($dir2)) {
-		$i = 0;
-		while (false !== ($ufile = readdir($handle))) {
-			$fn = "$dir2/$ufile";
-			if ($ufile == "." || $ufile == "..") {
-				continue;
+if (file_exists($dir2) && $handle = opendir($dir2)) {
+	$i = 0;
+	while (false !== ($ufile = readdir($handle))) {
+		$fn = "$dir2/$ufile";
+		if ($ufile == "." || $ufile == "..") {
+			continue;
+		}
+		$filetype = filetype($fn);
+		unset($obj);
+		if ($filetype == "file") {
+			$ft = PlanetbiruFileManager::getMIMEType($fn);
+			$obj['url'] = $cfg->rooturl . '/' . substr(PlanetbiruFileManager::path_encode($fn, $cfg->rootdir), 5);
+			$obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
+			$obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
+			$obj['name'] = basename($fn);
+			$fs = filesize($fn);
+			$obj['filesize'] = $fs;
+			if ($fs >= 1048576) {
+				$obj['size'] = number_format($fs / 1048576, 2, '.', '') . 'M';
+			} else if ($fs >= 1024) {
+				$obj['size'] = number_format($fs / 1024, 2, '.', '') . 'K';
+			} else {
+				$obj['size'] = $fs;
 			}
-			$filetype = filetype($fn);
-			unset($obj);
-			if ($filetype == "file") {
-				$ft = PlanetbiruFileManager::getMIMEType($fn);
-				$obj['url'] = $cfg->rooturl . '/' . substr(PlanetbiruFileManager::path_encode($fn, $cfg->rootdir), 5);
-				$obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
-				$obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
-				$obj['name'] = basename($fn);
-				$fs = filesize($fn);
-				$obj['filesize'] = $fs;
-				if ($fs >= 1048576) {
-					$obj['size'] = number_format($fs / 1048576, 2, '.', '') . 'M';
-				} else if ($fs >= 1024) {
-					$obj['size'] = number_format($fs / 1024, 2, '.', '') . 'K';
-				} else {
-					$obj['size'] = $fs;
-				}
-				$obj['type'] = $ft->mime;
-				$obj['extension'] = $ft->extension;
-				$obj['permission'] = substr(sprintf('%o', fileperms($fn)), -4);
-				$fti = filemtime($fn);
-				$obj['filemtime'] = '<span title="' . date('Y-m-d H:i:s', $fti) . '">' . date('y-m-d', $fti) . '</span>';
-				$obj['mtime'] = $fti;
+			$obj['type'] = $ft->mime;
+			$obj['extension'] = $ft->extension;
+			$obj['permission'] = substr(sprintf('%o', fileperms($fn)), -4);
+			$fti = filemtime($fn);
+			$obj['filemtime'] = '<span title="' . date('Y-m-d H:i:s', $fti) . '">' . date('y-m-d', $fti) . '</span>';
+			$obj['mtime'] = $fti;
 
-				if ((stripos($obj['type'], 'image') !== false || stripos($obj['type'], 'application/x-shockwave-flash') !== false) && $obj['filesize'] <= $cfg->thumbnail_max_size) {
-					try {
-						$is = @getimagesize($fn);
-						if ($is) {
-							$obj['image_width'] = $is[0];
-							$obj['image_height'] = $is[1];
-							if (stripos($is['mime'], 'image') === 0) {
-								$obj['type'] = $is['mime'];
-							}
-						} else {
-							$obj['image_width'] = 0;
-							$obj['image_height'] = 0;
+			if ((stripos($obj['type'], 'image') !== false || stripos($obj['type'], 'application/x-shockwave-flash') !== false) && $obj['filesize'] <= $cfg->thumbnail_max_size) {
+				try {
+					$is = @getimagesize($fn);
+					if ($is) {
+						$obj['image_width'] = $is[0];
+						$obj['image_height'] = $is[1];
+						if (stripos($is['mime'], 'image') === 0) {
+							$obj['type'] = $is['mime'];
 						}
-					} catch (Exception $e) {
+					} else {
 						$obj['image_width'] = 0;
 						$obj['image_height'] = 0;
 					}
-				} else {
+				} catch (Exception $e) {
 					$obj['image_width'] = 0;
 					$obj['image_height'] = 0;
 				}
-				$arrfile[] = $obj;
-			} else if ($filetype == "dir") {
-				$obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
-				$obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
-				$obj['name'] = basename($fn);
-				$obj['type'] = 'dir';
-				$obj['permission'] = substr(sprintf('%o', fileperms($fn)), -4);
-				$fti = filemtime($fn);
-				$obj['filemtime'] = '<span title="' . date('Y-m-d H:i:s', $fti) . '">' . date('y-m-d', $fti) . '</span>';
-				$obj['mtime'] = $fti;
-				$arrdir[] = $obj;
+			} else {
+				$obj['image_width'] = 0;
+				$obj['image_height'] = 0;
 			}
+			$arrfile[] = $obj;
+		} else if ($filetype == "dir") {
+			$obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
+			$obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
+			$obj['name'] = basename($fn);
+			$obj['type'] = 'dir';
+			$obj['permission'] = substr(sprintf('%o', fileperms($fn)), -4);
+			$fti = filemtime($fn);
+			$obj['filemtime'] = '<span title="' . date('Y-m-d H:i:s', $fti) . '">' . date('y-m-d', $fti) . '</span>';
+			$obj['mtime'] = $fti;
+			$arrdir[] = $obj;
 		}
 	}
+
 }
 $sortby = @$_GET['sortby'];
 if (!in_array($sortby, array('name', 'filesize', 'type', 'permission', 'filemtime'))) {

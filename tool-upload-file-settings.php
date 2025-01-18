@@ -41,16 +41,16 @@ if(@$_GET['show-form'])
 <td class="tdr" width="50%">Compress Image Automatically</td>
 <td><?php
 $compressimageonupload=PlanetbiruFileManager::getfmprofile('compressimageonupload',$authblogid,0);?>
-<label><input type="radio" name="compressimageonupload" class="compressimageonupload" value="1"<?php if($compressimageonupload==1) echo ' checked="checked"';?> /> Yes</label>
-<label><input type="radio" name="compressimageonupload" class="compressimageonupload" value="0"<?php if($compressimageonupload==0) echo ' checked="checked"';?> /> No</label>
+<label><input type="radio" name="compressimageonupload" class="compressimageonupload" value="1"<?php if($compressimageonupload==1) {echo ' checked="checked"';}?> /> Yes</label>
+<label><input type="radio" name="compressimageonupload" class="compressimageonupload" value="0"<?php if($compressimageonupload==0) {echo ' checked="checked"';}?> /> No</label>
 </td>
 </tr>
 <tr>
 <td class="tdr">Progressive Display</td>
 <td><?php
 $imageinterlace=PlanetbiruFileManager::getfmprofile('imageinterlace',$authblogid,0);?>
-<label><input type="radio" name="imageinterlace" class="imageinterlace" value="1"<?php if($imageinterlace==1) echo ' checked="checked"';?> /> Yes</label>
-<label><input type="radio" name="imageinterlace" class="imageinterlace" value="0"<?php if($imageinterlace==0) echo ' checked="checked"';?> /> No</label>
+<label><input type="radio" name="imageinterlace" class="imageinterlace" value="1"<?php if($imageinterlace==1) {echo ' checked="checked"';}?> /> Yes</label>
+<label><input type="radio" name="imageinterlace" class="imageinterlace" value="0"<?php if($imageinterlace==0) {echo ' checked="checked"';}?> /> No</label>
 </td>
 </tr>
 <tr>
@@ -85,7 +85,7 @@ if(@$_GET['show-control'])
 $compressimageonupload=PlanetbiruFileManager::getfmprofile('compressimageonupload',$authblogid,0);
 $imageformat = PlanetbiruFileManager::getfmprofile('imageformat',$authblogid,0);
 ?>
-<label><input type="checkbox" id="compress-image-cb" name="compress-image-cb" value="1"<?php if($compressimageonupload==1) {echo ' checked="checked"';}?> onChange="setActiveCompress(this.checked)" /> Compress <?php if($imageformat==0) echo 'JPEG ';?>Image Maximum <?php echo PlanetbiruFileManager::getfmprofile('maximagewidth',$authblogid,600);?>x<?php echo PlanetbiruFileManager::getfmprofile('maximageheight',$authblogid,800);?></label>
+<label><input type="checkbox" id="compress-image-cb" name="compress-image-cb" value="1"<?php if($compressimageonupload==1) {echo ' checked="checked"';}?> onChange="setActiveCompress(this.checked)" /> Compress <?php if($imageformat==0) {echo 'JPEG ';}?>Image Maximum <?php echo PlanetbiruFileManager::getfmprofile('maximagewidth',$authblogid,600);?>x<?php echo PlanetbiruFileManager::getfmprofile('maximageheight',$authblogid,800);?></label>
 <?php
 }
 ?>
