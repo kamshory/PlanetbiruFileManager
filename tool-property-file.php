@@ -6,7 +6,7 @@ if($cfg->authentification_needed && !$userlogin)
 {
 	exit();
 }
-$filename = path_decode(kh_filter_input(INPUT_GET, 'filepath'), $cfg->rootdir);
+$filename = PlanetbiruFileManager::path_decode(@$_GET['filepath'], $cfg->rootdir);
 $json_exif = "";
 if(@$_GET['type']=='directory')
 {
@@ -44,7 +44,7 @@ if(file_exists($filename))
 }
 else if(@$_GET['type']=='image')
 {
-$ft = getMIMEType($filename);
+$ft = PlanetbiruFileManager::getMIMEType($filename);
 if(file_exists($filename))
 {
 	$is = @getimagesize($filename);
@@ -59,7 +59,7 @@ if(file_exists($filename))
 		if(function_exists("exif_read_data"))
 		{
 			$exif = @exif_read_data($filename, 0, true);
-			$json_exif = rawurlencode(json_encode(array(get_capture_info($exif))));
+			$json_exif = rawurlencode(json_encode(array(PlanetbiruFileManager::get_capture_info($exif))));
 			if(isset($exif['IFD0']['Make']))
 			{
 				if(isset($exif['IFD0']['Model']))
@@ -89,7 +89,7 @@ if(file_exists($filename))
                 }
             }
 
-            $reallat = dmstoreal($latd, $latm, $lats);
+            $reallat = PlanetbiruFileManager::dmstoreal($latd, $latm, $lats);
             if (isset($gpsinfo['GPSLatitudeRef']) && stripos($gpsinfo['GPSLatitudeRef'], "S") !== false) {
                 $reallat *= -1;
             }
@@ -107,7 +107,7 @@ if(file_exists($filename))
                 }
             }
 
-            $reallong = dmstoreal($longd, $longm, $longs);
+            $reallong = PlanetbiruFileManager::dmstoreal($longd, $longm, $longs);
             if (isset($gpsinfo['GPSLongitudeRef']) && stripos($gpsinfo['GPSLongitudeRef'], "W") !== false) {
                 $reallong *= -1;
             }
@@ -140,7 +140,7 @@ if(file_exists($filename))
 	$md5 = md5_file($filename);
 	$filesize = filesize($filename);
 }
-$url = $cfg->rooturl.'/'.substr(path_encode($filename, $cfg->rootdir),5);
+$url = $cfg->rooturl.'/'.substr(PlanetbiruFileManager::path_encode($filename, $cfg->rootdir),5);
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">
   <tr>
@@ -208,7 +208,7 @@ $url = $cfg->rooturl.'/'.substr(path_encode($filename, $cfg->rootdir),5);
 }
 else if(@$_GET['type']=='video')
 {
-$ft = getMIMEType($filename);
+$ft = PlanetbiruFileManager::getMIMEType($filename);
 if(file_exists($filename))
 {
 	$filectime = date('Y-m-d H:i:s',  filectime($filename));
@@ -218,7 +218,7 @@ if(file_exists($filename))
 	$md5 = md5_file($filename);
 	$filesize = filesize($filename);
 }
-$url = $cfg->rooturl.'/'.substr(path_encode($filename, $cfg->rootdir),5);
+$url = $cfg->rooturl.'/'.substr(PlanetbiruFileManager::path_encode($filename, $cfg->rootdir),5);
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">
   <tr>
@@ -258,7 +258,7 @@ $url = $cfg->rooturl.'/'.substr(path_encode($filename, $cfg->rootdir),5);
 }
 else
 {
-$ft = getMIMEType($filename);
+$ft = PlanetbiruFileManager::getMIMEType($filename);
 if(file_exists($filename))
 {
 	$filectime = date('Y-m-d H:i:s',  filectime($filename));
@@ -268,7 +268,7 @@ if(file_exists($filename))
 	$md5 = md5_file($filename);
 	$filesize = filesize($filename);
 }
-$url = $cfg->rooturl.'/'.substr(path_encode($filename, $cfg->rootdir),5);
+$url = $cfg->rooturl.'/'.substr(PlanetbiruFileManager::path_encode($filename, $cfg->rootdir),5);
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">
   <tr>

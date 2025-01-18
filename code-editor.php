@@ -10,8 +10,8 @@ if($cfg->authentification_needed && !$userlogin)
 if(@$_GET['option'] == 'ajax-load')
 {
 	$cnt = "";
-	$path = kh_filter_input(INPUT_GET, 'filepath');
-	$filepath = path_decode($path, $cfg->rootdir);
+	$path = @$_GET['filepath'];
+	$filepath = PlanetbiruFileManager::path_decode($path, $cfg->rootdir);
 	if(file_exists($filepath))
 	{
 		$cnt = file_get_contents($filepath);
@@ -21,8 +21,8 @@ if(@$_GET['option'] == 'ajax-load')
 else
 {
 	$cnt = "";
-	$path = kh_filter_input(INPUT_GET, 'filepath');
-	$filepath = path_decode($path, $cfg->rootdir);
+	$path = @$_GET['filepath'];
+	$filepath = PlanetbiruFileManager::path_decode($path, $cfg->rootdir);
 	if(file_exists($filepath))
 	{
 		$cnt = file_get_contents($filepath);
@@ -85,7 +85,7 @@ body, html{
 <div class="file">
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td><input type="text" name="filename" id="filename" value="<?php echo path_encode($filepath, $cfg->rootdir);?>" autocomplete="off" placeholder="File" required></td>
+    <td><input type="text" name="filename" id="filename" value="<?php echo PlanetbiruFileManager::path_encode($filepath, $cfg->rootdir);?>" autocomplete="off" placeholder="File" required></td>
     <td width="60" style="padding-left:4px;"><input type="button" name="open" id="open" value="Open"></td>
     <td width="60" style="padding-left:4px;"><input type="button" name="save" id="save" value="Save"></td>
   </tr>

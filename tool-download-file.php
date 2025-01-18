@@ -8,17 +8,17 @@ if($cfg->authentification_needed && !$userlogin)
 }
 if(isset($_GET['relative']))
 {
-	$filepath = $cfg->rootdir.'/'.substr(str_replace(array("./", "../"), "", kh_filter_input(INPUT_GET, 'filepath')), strlen(basename($cfg->rooturl)));
+	$filepath = $cfg->rootdir.'/'.substr(str_replace(array("./", "../"), "", @$_GET['filepath']), strlen(basename($cfg->rooturl)));
 }
 else
 {
-	$filepath = rawurldecode(path_decode(kh_filter_input(INPUT_GET, 'filepath'), $cfg->rootdir));
+	$filepath = rawurldecode(PlanetbiruFileManager::path_decode(@$_GET['filepath'], $cfg->rootdir));
 }
 if(!file_exists($filepath)) 
 {
 	exit();
 }
-$ft = getMIMEType($filepath);
+$ft = PlanetbiruFileManager::getMIMEType($filepath);
 $mime = $ft->mime;
 header('Content-type: '.$mime);
 if(!isset($_GET['relative']))

@@ -7,10 +7,10 @@ if($cfg->authentification_needed && !$userlogin)
 	exit();
 }
 $rooturl = $cfg->rootdir;
-$seldir = kh_filter_input(INPUT_GET, 'dir', FILTER_DEFAULT);
-$dir2 = path_decode(kh_filter_input(INPUT_GET, 'seldir'), $cfg->rootdir);
+$seldir = @$_GET['dir'];
+$dir2 = PlanetbiruFileManager::path_decode(@$_GET['seldir'], $cfg->rootdir);
 if(!is_dir($dir2)){
-$dir2 = path_decode('', $cfg->rootdir);	
+$dir2 = PlanetbiruFileManager::path_decode('', $cfg->rootdir);	
 }
 $arrdir = array();
 if(file_exists($dir2) && $handle = opendir($dir2))
@@ -30,8 +30,8 @@ if(file_exists($dir2) && $handle = opendir($dir2))
 			unset($obj);
 			if($filetype == "dir")
 			{
-				$obj['path'] = path_encode($fn, $cfg->rootdir);
-				$obj['location'] = path_encode(dirname($fn), $cfg->rootdir);
+				$obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
+				$obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
 				$obj['name'] = basename($fn);
 				$arrdir[] = $obj;
 			}
@@ -43,8 +43,8 @@ if(file_exists($dir2) && $handle = opendir($dir2))
 				unset($obj);
 				if(is_dir($fn))
 				{
-					$obj['path'] = path_encode($fn, $cfg->rootdir);
-					$obj['location'] = path_encode(dirname($fn), $cfg->rootdir);
+					$obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
+					$obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
 					$obj['name'] = basename($fn);
 					$arrdir[] = $obj;
 				}
@@ -60,11 +60,15 @@ if(file_exists($dir2) && $handle = opendir($dir2))
 	
 }
 
+// Membuat array $_order yang berisi nama dari setiap elemen di $arrdir
 $_order = array();
-foreach ($arrdir as &$row){
-$_order[] = &$row['name'];
+foreach ($arrdir as $row) {
+    $_order[] = $row['name']; // Ambil nilai dari kolom 'name'
 }
+
+// Melakukan pengurutan array $arrdir berdasarkan $_order
 array_multisort($_order, SORT_ASC, SORT_STRING, $arrdir);
+
 if(count($arrdir))
 {
 ?>
@@ -79,7 +83,7 @@ if($val['location'] && stripos($seldir, $val['path']) !== false)
 {
 	// recursive
 	// list dir tree
-	echo builddirtree($seldir);
+	echo PlanetbiruFileManager::builddirtree($seldir);
 }
 ?>
 </li>

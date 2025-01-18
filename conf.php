@@ -71,6 +71,11 @@ if(file_exists(dirname(__FILE__)."/.htpasswd"))
 	}
 	$cfg->users = implode("\r\n", $row);
 }
+else
+{
+	$cfg->users = 'administrator:$apr1$ZlYfGv7V$0cAZNh8Si4WKBgY5H1mS1/';
+	file_put_contents(dirname(__FILE__)."/.htpasswd", $cfg->users);
+}
 /*
 0 = username
 1 = password

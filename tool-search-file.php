@@ -7,7 +7,7 @@ if($cfg->authentification_needed && !$userlogin)
 {
 	exit();
 }
-$dir = path_decode(kh_filter_input(INPUT_GET, 'dir'), $cfg->rootdir);
+$dir = PlanetbiruFileManager::path_decode(@$_GET['dir'], $cfg->rootdir);
 $lv2 = new ListFile($cfg, $dir);
 $arrfile = $lv2->resultFile;
 $arrdir = $lv2->resultDir;

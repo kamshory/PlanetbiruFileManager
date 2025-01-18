@@ -16,9 +16,9 @@ if(@$cfg->thumbnail_on_load)
 }
 
 
-$dir2 = path_decode(kh_filter_input(INPUT_GET, 'dir'), $cfg->rootdir);
+$dir2 = PlanetbiruFileManager::path_decode(@$_GET['dir'], $cfg->rootdir);
 if(!is_dir($dir2)){
-$dir2 = path_decode('base', $cfg->rootdir);	
+$dir2 = PlanetbiruFileManager::path_decode('base', $cfg->rootdir);	
 }
 $arrfile = array();
 $arrdir = array();
@@ -38,10 +38,10 @@ if(file_exists($dir2))
 			unset($obj);
 			if($filetype=="file")
 			{
-				$ft = getMIMEType($fn);
-				$obj['url'] = $cfg->rooturl.'/'.substr(path_encode($fn, $cfg->rootdir),5);
-				$obj['path'] = path_encode($fn, $cfg->rootdir);
-				$obj['location'] = path_encode(dirname($fn), $cfg->rootdir);
+				$ft = PlanetbiruFileManager::getMIMEType($fn);
+				$obj['url'] = $cfg->rooturl.'/'.substr(PlanetbiruFileManager::path_encode($fn, $cfg->rootdir),5);
+				$obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
+				$obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
 				$obj['name'] = basename($fn);
 				$fs = filesize($fn);
 				$obj['filesize'] = $fs;
@@ -99,8 +99,8 @@ if(file_exists($dir2))
 			}
 			else if($filetype=="dir")
 			{
-				$obj['path'] = path_encode($fn, $cfg->rootdir);
-				$obj['location'] = path_encode(dirname($fn), $cfg->rootdir);
+				$obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
+				$obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
 				$obj['name'] = basename($fn);
 				$obj['type'] = 'dir';
 				$obj['permission'] = substr(sprintf('%o', fileperms($fn)), -4);
@@ -112,41 +112,50 @@ if(file_exists($dir2))
 		}
 	}
 }
-$sortby = kh_filter_input(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
-if(!in_array($sortby, array('name', 'filesize', 'type', 'permission', 'filemtime')))
-$sortby = '';							
-if($sortby == '')
-$sortby = 'type';
-$sortorder = kh_filter_input(INPUT_GET, 'sortorder', FILTER_SANITIZE_STRING);
-if(!in_array($sortorder, array('asc', 'desc')))
-$sortorder = '';							
-if($sortorder == '')
-$sortorder = 'asc';
+$sortby = @$_GET['sortby'];
+if (!in_array($sortby, array('name', 'filesize', 'type', 'permission', 'filemtime'))) {
+    $sortby = ''; // Set sortby ke kosong jika tidak valid
+}
+if ($sortby == '') {
+    $sortby = 'type'; // Default sortby jika kosong
+}
 
+$sortorder = @$_GET['sortorder'];
+if (!in_array($sortorder, array('asc', 'desc'))) {
+    $sortorder = ''; // Set sortorder ke kosong jika tidak valid
+}
+if ($sortorder == '') {
+    $sortorder = 'asc'; // Default sortorder jika kosong
+}
 
+// Sort directory based on 'name' (default sorting is by 'name' in ascending order)
 $_order = array();
-foreach ($arrdir as &$row){
-$_order[] = &$row['name'];
+foreach ($arrdir as $row) {
+    $_order[] = $row['name']; // Ambil nilai 'name' untuk pengurutan
 }
 array_multisort($_order, SORT_ASC, SORT_STRING, $arrdir);
 
+// Sort files based on selected sortby field
 $_order = array();
 $_order2 = array();
-// remove extension before sort
-$arrfilesort =  $arrfile;
-foreach($arrfilesort as $key=>$val)
-{
-	$pos = strripos($val['name'], ".");
-	if($pos !== false)
-	{
-		$arrfilesort[$key]['name'] = substr($val['name'], 0, $pos);
-	}
+
+// Remove extension before sorting for better file name sorting
+$arrfilesort = $arrfile;
+foreach ($arrfilesort as $key => $val) {
+    $pos = strripos($val['name'], ".");
+    if ($pos !== false) {
+        $arrfilesort[$key]['name'] = substr($val['name'], 0, $pos); // Hapus ekstensi untuk sorting
+    }
 }
-foreach ($arrfilesort as &$row){
-$_order[] = &$row[$sortby];
-$_order2[] = &$row['name'];
+
+// Populate $_order with sorting data
+foreach ($arrfilesort as $row) {
+    $_order[] = $row[$sortby]; // Ambil nilai dari field yang dipilih untuk pengurutan
+    $_order2[] = $row['name']; // Ambil nama file asli untuk pengurutan sekunder
 }
-array_multisort($_order, ($sortorder=='desc')?SORT_DESC:SORT_ASC, $_order2, SORT_ASC, SORT_STRING, $arrfile);
+
+// Sort files by sortby field (primary sort) and by name (secondary sort)
+array_multisort($_order, ($sortorder == 'desc') ? SORT_DESC : SORT_ASC, $_order2, SORT_ASC, SORT_STRING, $arrfile);
 
 if(count($arrdir)>0 || count($arrfile)>0)
 {

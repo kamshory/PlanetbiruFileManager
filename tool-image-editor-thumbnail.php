@@ -10,14 +10,14 @@ if(isset($_POST['postdata']))
 {
 	parse_str(@$_POST['postdata'], $_GET);
 }
-$filepath = path_decode(kh_filter_input(INPUT_GET, 'filepath'), $cfg->rootdir);
-$angle = kh_filter_input(INPUT_GET, 'angle', FILTER_SANITIZE_NUMBER_UINT);
+$filepath = PlanetbiruFileManager::path_decode(@$_GET['filepath'], $cfg->rootdir);
+$angle = @$_GET['angle'] * 1;
 $angle = $angle % 360;
-$fliph = kh_filter_input(INPUT_GET, 'fliph', FILTER_SANITIZE_NUMBER_UINT);
-$flipv = kh_filter_input(INPUT_GET, 'flipv', FILTER_SANITIZE_NUMBER_UINT);
-$width = kh_filter_input(INPUT_GET, 'width', FILTER_SANITIZE_NUMBER_UINT);
-$height = kh_filter_input(INPUT_GET, 'height', FILTER_SANITIZE_NUMBER_UINT);
-$crop = kh_filter_input(INPUT_GET, 'crop', FILTER_SANITIZE_NUMBER_UINT);
+$fliph = @$_GET['fliph'] * 1;
+$flipv = @$_GET['flipv'] * 1;
+$width = @$_GET['width'] * 1;
+$height = @$_GET['height'] * 1;
+$crop = @$_GET['crop'] * 1;
 
 if(!function_exists('imagecreatetruecolor'))
 {

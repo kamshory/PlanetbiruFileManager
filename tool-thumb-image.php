@@ -9,81 +9,9 @@ if (!$cfg->thumbnail_quality) {
 	$cfg->thumbnail_quality = 75;
 }
 
-$filepath = path_decode(kh_filter_input(INPUT_GET, 'filepath'), $cfg->rootdir);
+$filepath = PlanetbiruFileManager::path_decode(@$_GET['filepath'], $cfg->rootdir);
 
-function gettumbpict($originalfile, $maxw, $maxh)
-{
-	global $cfg;
-	$image = new StdClass();
-	$filesize = filesize($originalfile);
-	if ($filesize > $cfg->thumbnail_max_size) {
-		return false;
-	}
-	$imageinfo = @getimagesize($originalfile);
-	if (empty($imageinfo)) {
-		return 0;
-	}
-	$image->width = $imageinfo[0];
-	$image->height = $imageinfo[1];
-	$image->type = $imageinfo[2];
-	$newwidth = $image->width;
-	$newheight = $image->height;
-	if (!$newwidth || !$newheight) {
-		return false;
-	}
-	if ($maxw != 0 && $image->width > $maxw) {
 
-		$newwidth = $maxw;
-		$newheight = $image->height * $maxw / $image->width;
-	}
-	if ($maxh != 0 && $newheight > $maxh) {
-
-		$tmp = $newheight;
-		$newheight = $maxh;
-		$newwidth = $newwidth * $maxh / $tmp;
-	}
-	switch ($image->type) {
-		case IMAGETYPE_GIF:
-			if (function_exists('ImageCreateFromGIF')) {
-				$im = @ImageCreateFromGIF($originalfile);
-			} else {
-				return false;
-			}
-			break;
-		case IMAGETYPE_JPEG:
-			if (function_exists('ImageCreateFromJPEG')) {
-				$im = @ImageCreateFromJPEG($originalfile);
-			} else {
-				return false;
-			}
-			break;
-		case IMAGETYPE_PNG:
-			if (function_exists('ImageCreateFromPNG')) {
-				$im = @ImageCreateFromPNG($originalfile);
-			} else {
-				return false;
-			}
-			break;
-		default:
-			return false;
-	}
-	$im1 = imagecreatetruecolor($newwidth, $newheight);
-	$cx = $image->width / 2;
-	$cy = $image->height / 2;
-	if ($image->width < $image->height) {
-		$half = floor($image->width / 2.0);
-	} else {
-		$half = floor($image->height / 2.0);
-	}
-	$white = imagecolorallocate($im1, 255, 255, 255);
-	$black = imagecolorallocate($im1, 0, 0, 0);
-	if (!$im) {
-		return false;
-	}
-	imagefilledrectangle($im1, 0, 0, $newwidth, $newheight, $white);
-	imagecopyresized($im1, $im, 0, 0, 0, 0, $newwidth, $newheight, $image->width, $image->height);
-	return $im1;
-}
 
 if (file_exists($filepath)) {
 	$filetype = filetype($filepath);
@@ -96,7 +24,7 @@ if (file_exists($filepath)) {
 			readfile(dirname(__FILE__) . "/style/images/common/image.png");
 			header('Content-Type: image/png');
 		} else {
-			$image = gettumbpict($filepath, 96, 96);
+			$image = PlanetbiruFileManager::gettumbpict($filepath, 96, 96);
 			if ($image) {
 				header('Content-Type: image/jpeg');
 				@imagejpeg($image, null, $cfg->thumbnail_quality);
@@ -131,7 +59,7 @@ if (file_exists($filepath)) {
 					}
 					$filetype = filetype($fn);
 					if ($filetype == "file") {
-						$img2[$i] = gettumbpict($fn, 40, 40);
+						$img2[$i] = PlanetbiruFileManager::gettumbpict($fn, 40, 40);
 						if ($img2[$i]) {
 							$width = imagesx($img2[$i]);
 							$height = imagesy($img2[$i]);

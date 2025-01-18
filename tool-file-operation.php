@@ -12,8 +12,8 @@ if ($cfg->readonly) {
 
 $rooturl = $cfg->rootdir;
 if (@$_GET['option'] == 'createdir') {
-	$dir2 = path_decode(kh_filter_input(INPUT_POST, 'location'), $cfg->rootdir);
-	$name = kh_filter_input(INPUT_POST, 'name');
+	$dir2 = PlanetbiruFileManager::path_decode(@$_POST['location'], $cfg->rootdir);
+	$name = @$_POST['name'];
 	$name = trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", $name), "/\\");
 	if (file_exists($dir2)) {
 		if (!file_exists($dir2 . "/" . $name)) {
@@ -28,11 +28,11 @@ if (@$_GET['option'] == 'createdir') {
 	}
 }
 if (@$_GET['option'] == 'createfile') {
-	$dir2 = path_decode(kh_filter_input(INPUT_POST, 'location'), $cfg->rootdir);
-	$name = kh_filter_input(INPUT_POST, 'name');
+	$dir2 = PlanetbiruFileManager::path_decode(@$_POST['location'], $cfg->rootdir);
+	$name = @$_POST['name'];
 	$name = trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", $name), "/\\");
 	if (file_exists($dir2)) {
-		$tt = getMIMEType($dir2 . "/" . $name);
+		$tt = PlanetbiruFileManager::getMIMEType($dir2 . "/" . $name);
 		if (in_array($tt->extension, $cfg->forbidden_extension)) {
 			die('FORBIDDENEXT');
 		}
@@ -48,7 +48,7 @@ if (@$_GET['option'] == 'createfile') {
 			echo 'EXIST';
 		}
 	}
-	deleteforbidden($dir2);
+	PlanetbiruFileManager::deleteforbidden($dir2);
 }
 
 if (@$_GET['option'] == 'copyfile') {
@@ -56,7 +56,7 @@ if (@$_GET['option'] == 'copyfile') {
 	parse_str(@$_POST['postdata'], $_POST);
 
 
-	$targetdir = path_decode(kh_filter_input(INPUT_POST, 'targetdir'), $cfg->rootdir);
+	$targetdir = PlanetbiruFileManager::path_decode(@$_POST['targetdir'], $cfg->rootdir);
 
 	// prepare dir
 	$dir = str_replace("\\", "/", $targetdir);
@@ -78,11 +78,11 @@ if (@$_GET['option'] == 'copyfile') {
 	$dirmoved = array();
 	if (is_array($files)) {
 		foreach ($files as $k => $file) {
-			$source = path_decode($file, $cfg->rootdir);
+			$source = PlanetbiruFileManager::path_decode($file, $cfg->rootdir);
 			if (file_exists($source)) {
 				if (is_dir($source)) {
 					if ($source != $targetdir . "/" . basename($source)) {
-						cp($source, $targetdir . "/" . basename($source));
+						PlanetbiruFileManager::cp($source, $targetdir . "/" . basename($source));
 						if ($source != $targetdir . "/" . basename($source)) {
 							$dirmoved[] = $source;
 						}
@@ -103,13 +103,13 @@ if (@$_GET['option'] == 'copyfile') {
 	}
 	if (isset($_GET['deletesource'])) {
 		foreach ($dirmoved as $k => $path) {
-			destroyall($path);
+			PlanetbiruFileManager::destroyall($path);
 		}
 		foreach ($filemoved as $k => $path) {
 			@unlink($path);
 		}
 	}
-	deleteforbidden($targetdir, true);
+	PlanetbiruFileManager::deleteforbidden($targetdir, true);
 }
 
 if (@$_GET['option'] == 'deletefile') {
@@ -118,9 +118,9 @@ if (@$_GET['option'] == 'deletefile') {
 	$files = @$_POST['file'];
 	if (is_array($files)) {
 		foreach ($files as $k => $file) {
-			$source = path_decode($file, $cfg->rootdir);
+			$source = PlanetbiruFileManager::path_decode($file, $cfg->rootdir);
 			if (is_dir($source)) {
-				destroyall($source);
+				PlanetbiruFileManager::destroyall($source);
 			} else {
 				@unlink($source);
 			}
@@ -132,13 +132,13 @@ if (@$_GET['option'] == 'deletefile') {
 }
 
 if (@$_GET['option'] == 'renamefile') {
-	$location = path_decode(kh_filter_input(INPUT_POST, 'location'), $cfg->rootdir);
-	$oldname = $location . "/" . trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", kh_filter_input(INPUT_POST, 'oldname')), "/\\");
-	$newname = $location . "/" . trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", kh_filter_input(INPUT_POST, 'newname')), "/\\");
+	$location = PlanetbiruFileManager::path_decode(@$_POST['location'], $cfg->rootdir);
+	$oldname = $location . "/" . trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", @$_POST['oldname']), "/\\");
+	$newname = $location . "/" . trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", @$_POST['newname']), "/\\");
 	if (file_exists($newname)) {
 		die('EXIST');
 	} else {
-		$tt = getMIMEType($newname);
+		$tt = PlanetbiruFileManager::getMIMEType($newname);
 		if (in_array($tt->extension, $cfg->forbidden_extension)) {
 			die('FORBIDDENEXT');
 		}
@@ -148,15 +148,15 @@ if (@$_GET['option'] == 'renamefile') {
 			echo 'FAILED';
 		}
 	}
-	deleteforbidden(dirname($newname));
+	PlanetbiruFileManager::deleteforbidden(dirname($newname));
 }
 
 if (@$_GET['option'] == 'extractfile') {
 	if (!class_exists('ZipArchive')) {
 		die('NOTSUPPORTED');
 	}
-	$targetdir = path_decode(kh_filter_input(INPUT_POST, 'targetdir'), $cfg->rootdir);
-	$filepath = path_decode(kh_filter_input(INPUT_POST, 'filepath'), $cfg->rootdir);
+	$targetdir = PlanetbiruFileManager::path_decode(@$_POST['targetdir'], $cfg->rootdir);
+	$filepath = PlanetbiruFileManager::path_decode(@$_POST['filepath'], $cfg->rootdir);
 
 	if (file_exists($filepath)) {
 		if (filesize($filepath) < 10) {
@@ -166,7 +166,7 @@ if (@$_GET['option'] == 'extractfile') {
 			if ($zip->open($filepath) === true) {
 				$zip->extractTo($targetdir . '/');
 				$zip->close();
-				deleteforbidden($targetdir, true);
+				PlanetbiruFileManager::deleteforbidden($targetdir, true);
 				echo 'SUCCESS';
 			} else {
 				echo 'FAILED';
@@ -185,7 +185,7 @@ if (@$_GET['option'] == 'compressfile') {
 	if (isset($_POST['postdata'])) {
 		parse_str(@$_POST['postdata'], $_POST);
 	}
-	$target = path_decode(kh_filter_input(INPUT_POST, 'targetpath'), $cfg->rootdir);
+	$target = PlanetbiruFileManager::path_decode(@$_POST['targetpath'], $cfg->rootdir);
 	if (file_exists($target)) {
 		die('CONFLICT');
 	}
@@ -211,7 +211,7 @@ if (@$_GET['option'] == 'compressfile') {
 	$file2compress = @$_POST['sourcepath'];
 	if (is_array($file2compress)) {
 		for ($i = 0; $i < count($file2compress); $i++) {
-			$file2compress[$i] = path_decode($file2compress[$i], $cfg->rootdir);
+			$file2compress[$i] = PlanetbiruFileManager::path_decode($file2compress[$i], $cfg->rootdir);
 
 			if ($file2compress[$i] == $target) {
 				die('CONFLICT');
@@ -229,7 +229,7 @@ if (@$_GET['option'] == 'compressfile') {
 			if (file_exists($file2compress[$i])) {
 				$file_list .= $file2compress[$i] . "\r\n";
 				if (filetype($file2compress[$i]) == 'dir') {
-					dir_list($file2compress[$i]);
+					PlanetbiruFileManager::dir_list($file2compress[$i]);
 				}
 			}
 		}
@@ -261,11 +261,11 @@ if (@$_GET['option'] == 'compressfile') {
 }
 
 if (@$_GET['option'] == 'transferfile') {
-	$source = kh_filter_input(INPUT_POST, 'source');
-	$location = trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", kh_filter_input(INPUT_POST, 'location')), "/\\");
-	$name = basename(trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", kh_filter_input(INPUT_POST, 'name')), "/\\"));
+	$source = @$_POST['source'];
+	$location = trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", @$_POST['location']), "/\\");
+	$name = basename(trim(str_replace(array("../", "./", "..\\", ".\\", "\\"), "/", @$_POST['name']), "/\\"));
 
-	$target = path_decode(rtrim($location, "\\/") . "/" . trim($name, "\\/"), $cfg->rootdir);
+	$target = PlanetbiruFileManager::path_decode(rtrim($location, "\\/") . "/" . trim($name, "\\/"), $cfg->rootdir);
 
 	$data = @file_get_contents($source);
 	if ($data === false) {
@@ -299,7 +299,7 @@ if (@$_GET['option'] == 'transferfile') {
 }
 
 if (@$_GET['option'] == 'get-perms') {
-	$filename = path_decode(kh_filter_input(INPUT_GET, 'filepath'), $cfg->rootdir);
+	$filename = PlanetbiruFileManager::path_decode(@$_GET['filepath'], $cfg->rootdir);
 	if (file_exists($filename)) {
 		$fileperms = substr(sprintf('%o', fileperms($filename)), -4);
 		$filetype = filetype($filename);
@@ -333,14 +333,14 @@ if (@$_GET['option'] == 'change-perms') {
 	if (isset($_POST['data'])) {
 		$fpa = $_POST['data'];
 		foreach ($fpa as $fp) {
-			$filename = path_decode($fp, $cfg->rootdir);
+			$filename = PlanetbiruFileManager::path_decode($fp, $cfg->rootdir);
 			if (file_exists($filename)) {
 				if ($recursive == '1') {
 					$type = filetype($filename);
 					if ($type == 'file') {
 						chmod($filename, $permission);
 					} else {
-						chmoddir($filename, $permission);
+						PlanetbiruFileManager::chmoddir($filename, $permission);
 					}
 				} else {
 					chmod($filename, $permission);

@@ -6,7 +6,7 @@ if($cfg->authentification_needed && !$userlogin)
 {
 	exit();
 }
-$filename = path_decode(kh_filter_input(INPUT_GET, 'filepath'), $cfg->rootdir);
+$filename = path_decode(@$_GET['filepath'], $cfg->rootdir);
 $path = path_encode($filename, $cfg->rootdir);
 $json_exif = "";
 if(file_exists($filename))

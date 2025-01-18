@@ -8,7 +8,7 @@ if($cfg->authentification_needed && !$userlogin)
 }
 if(@$_GET['option']=='openfile')
 {
-$filepath = path_decode(kh_filter_input(INPUT_GET, 'filepath'), $cfg->rootdir);
+$filepath = PlanetbiruFileManager::path_decode(@$_GET['filepath'], $cfg->rootdir);
 if(file_exists($filepath))
 {
 	$cnt = file_get_contents($filepath);
@@ -23,7 +23,7 @@ else
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr>
 <td>
-<input type="text" class="input-text" name="filepath" id="filepath" value="<?php echo htmlspecialchars(path_encode($filepath, $cfg->rootdir));?>" autocomplete="off" />
+<input type="text" class="input-text" name="filepath" id="filepath" value="<?php echo htmlspecialchars(PlanetbiruFileManager::path_encode($filepath, $cfg->rootdir));?>" autocomplete="off" />
 </td>
 <td width="64" align="right">
   <input type="button" name="open" id="open" value="Open" class="com-button" onclick="openFile($('#filepath').val())" />
@@ -43,7 +43,7 @@ if(@$_GET['option']=='savefile' && isset($_POST['filepath']))
 		die('READONLY');
 	}
 	
-	$filepath = path_decode(kh_filter_input(INPUT_POST, 'filepath'));
+	$filepath = PlanetbiruFileManager::path_decode(@$_POST['filepath']);
 	// prepare dir
 	$dir = dirname($filepath);
 	$dir = str_replace("\\","/",$dir);
@@ -65,11 +65,11 @@ if(@$_GET['option']=='savefile' && isset($_POST['filepath']))
 		}
 	}
 	
-	$content = kh_filter_input(INPUT_POST, 'filecontent');
+	$content = @$_POST['filecontent'];
 	$content = str_replace(array("\n"), array("\r\n"), $content);
 	$content = str_replace(array("\r\r\n"), array("\r\n"), $content);
 	
-	$tt = getMIMEType($filepath);
+	$tt = PlanetbiruFileManager::getMIMEType($filepath);
 	if(in_array($tt->extension, $cfg->forbidden_extension)){
 		die('FORBIDDENEXT');
 	}
@@ -96,4 +96,3 @@ if(@$_GET['option']=='savefile' && isset($_POST['filepath']))
 	echo 'NOTMODIFIED';
 	}
 }
-?>

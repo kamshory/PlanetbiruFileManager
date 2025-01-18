@@ -2,6 +2,7 @@
 include_once dirname(__FILE__)."/session.php";
 include_once dirname(__FILE__)."/conf.php";
 include_once dirname(__FILE__)."/functions.php";
+require_once __DIR__."/classes/HTPasswd.php";
 require_once __DIR__."/classes/ListFile.php";
 
 if(isset($_POST['username']) && isset($_POST['password']))
@@ -17,6 +18,7 @@ if(isset($_POST['username']) && isset($_POST['password']))
 		}
 		if($userid)
 		{
+			
 			$_SESSION['userid'] = $userid;
 			if(strlen(@$_POST['ref']))
 			{

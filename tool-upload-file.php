@@ -1,7 +1,8 @@
 <?php
-include_once(dirname(__FILE__)."/functions.php");
+include_once dirname(__FILE__)."/functions.php";
 include_once dirname(__FILE__)."/auth.php";
 include dirname(__FILE__)."/conf.php"; //NOSONAR
+
 if($cfg->authentification_needed && !$userlogin)
 {
 	exit();
@@ -14,7 +15,7 @@ if($cfg->readonly)
 {
 	die('READONLY');
 }
-$targetdir = path_decode(kh_filter_input(INPUT_GET, 'targetdir'), $cfg->rootdir);
+$targetdir = PlanetbiruFileManager::path_decode(@$_GET['targetdir'], $cfg->rootdir);
 
 
 if(isset($_FILES["images"]))
@@ -24,7 +25,7 @@ if(is_array($_FILES["images"]["error"]))
 foreach($_FILES["images"]["error"] as $key => $error){
     if($error == 0) {
         $name = $_FILES["images"]["name"][$key];
-		$name = kh_filter_file_name_safe($name);
+		$name = PlanetbiruFileManager::kh_filter_file_name_safe($name);
 		$compressimage = @$_SESSION['compress-image-cb'];
 		$settings['compressimageonupload'] = $compressimage;
 		// if exist before, file will not be deleted
@@ -40,8 +41,8 @@ foreach($_FILES["images"]["error"] as $key => $error){
 			} 
 			move_uploaded_file($_FILES["images"]["tmp_name"][$key], $targetdir."/".$name);
 			$info = getimagesize($targetdir."/".$name);
-			compressImageFile($targetdir."/".$name, $authblogid);
-			deleteforbidden($targetdir);
+			PlanetbiruFileManager::compressImageFile($targetdir."/".$name, $authblogid);
+			PlanetbiruFileManager::deleteforbidden($targetdir);
 			if(stripos($info['mime'],'image')!==false)
 			{
 				if(!$cfg->allow_upload_image)
@@ -73,7 +74,7 @@ else
 	if(isset($_FILES['file']['tmp_name']))
 	{
 		$name = $_FILES["file"]["name"];
-		$name = kh_filter_file_name_safe($name);
+		$name = PlanetbiruFileManager::kh_filter_file_name_safe($name);
 		if(file_exists($targetdir."/".$name))
 		{
 			$allowdelete = false;
@@ -82,9 +83,9 @@ else
 		copy($_FILES['file']['tmp_name'], $targetdir."/".$name);
 		} 
 		move_uploaded_file( $_FILES["file"]["tmp_name"], $targetdir."/".$name);
-		deleteforbidden($targetdir);
+		PlanetbiruFileManager::deleteforbidden($targetdir);
 		$info = getimagesize($targetdir."/".$name);
-		compressImageFile($targetdir."/".$name, $authblogid);
+		PlanetbiruFileManager::compressImageFile($targetdir."/".$name, $authblogid);
 		if(stripos($info['mime'],'image')!==false)
 		{
 			if(!$cfg->allow_upload_image)

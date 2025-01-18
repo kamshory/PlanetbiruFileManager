@@ -7,8 +7,8 @@ if($cfg->authentification_needed && !$userlogin)
 {
 	exit();
 }
-$filepath = path_decode(kh_filter_input(INPUT_GET, 'filepath'), $cfg->rootdir);
-$fileurl = htmlspecialchars(kh_filter_input(INPUT_GET, 'filepath', FILTER_SANITIZE_STRING));
+$filepath = PlanetbiruFileManager::path_decode(@$_GET['filepath'], $cfg->rootdir);
+$fileurl = htmlspecialchars(@$_GET['filepath']);
 
 $error_code = "";
 if(file_exists($filepath))
@@ -16,7 +16,7 @@ if(file_exists($filepath))
 if(!is_dir($filepath))
 {
 $size = getimagesize($filepath);
-$url = path_decode_to_url(@$_GET['filepath'], $cfg->rooturl);
+$url = PlanetbiruFileManager::path_decode_to_url(@$_GET['filepath'], $cfg->rooturl);
 if(stripos($size['mime'], 'image')===0)
 {
 ?>

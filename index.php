@@ -8,7 +8,7 @@ if($cfg->authentification_needed && !$userlogin)
 }
 
 $dir = trim(stripslashes(@$_GET['dir']),"/");
-if(!is_dir(path_decode($dir, $cfg->rootdir))){
+if(!is_dir(PlanetbiruFileManager::path_decode($dir, $cfg->rootdir))){
 	$dir = '';	
 }
 
