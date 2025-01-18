@@ -66,6 +66,7 @@ input[type=file] {
 	margin: 0px;
 	padding: 0px;
 	float: left;
+	margin-right: 6px;
 }
 
 .toolbar li {
@@ -91,7 +92,6 @@ input[type=file] {
 	border: 1px solid #DDDDDD;
 	background-color: #FFFFFF;
 	display: block;
-	vertical-align: bottom;
 }
 
 .toolbar li.inactive a:hover {
@@ -135,7 +135,7 @@ input[type=file] {
 }
 
 .address-bar tr td:nth-child(2) {
-	width: 100px;
+	width: 80px;
 }
 
 .address-bar .address {
@@ -143,10 +143,6 @@ input[type=file] {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-}
-
-.address-bar tr td:nth-child(2) {
-	width: 80px;
 }
 
 .address-bar .com-button {
@@ -251,7 +247,6 @@ input[type=file] {
 	background-color: #FAFAFA;
 }
 
-.file-table {}
 
 .file-table thead td {
 	background-color: #437AA3;
@@ -266,8 +261,6 @@ input[type=file] {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-
-.file-table tbody tr:hover td {}
 
 .row-even td {
 	background-color: #F4F4F4;
@@ -318,7 +311,6 @@ input[type=file] {
 	background: #FFFFFF url(images/context-menu2.png) repeat-y -1px 0px;
 }
 
-.kams-context-menu a:hover {}
 
 /* directory*/
 #directory-container {
@@ -661,10 +653,6 @@ input[type=file] {
 	padding: 6px 8px;
 }
 
-.toolbar ul {
-	margin-right: 6px;
-}
-
 .filename-area {
 	padding: 8px 0px 8px 0px;
 }
@@ -820,8 +808,6 @@ input[type=file] {
 	overflow: hidden;
 }
 
-.image-editor-all {}
-
 .image-editor-filename-name-area {
 	background-color: #FEFEFE;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#FEFEFE), to(#EEEEEE));
@@ -915,9 +901,6 @@ input[type=file] {
 	margin-left: 90px;
 }
 
-.image-editor-mainbar-inner {
-	padding: 8px;
-}
 
 #image-content {
 	padding-bottom: 8px;
@@ -929,7 +912,6 @@ input[type=file] {
 	padding: 1px 0px 2px 0px;
 }
 
-.new-dimension {}
 
 .image-editor-tool-item {
 	padding: 2px 0px;
@@ -957,6 +939,7 @@ input[type=file] {
 
 .image-tool-resize-dimension {
 	padding-bottom: 4px;
+	display: none;
 }
 
 .new-dimension {
@@ -990,9 +973,7 @@ input[type=file] {
 	padding-top: 6px;
 }
 
-.image-tool-resize-dimension {
-	display: none;
-}
+
 
 .file-list .directory-drop-hover .thumbitem {
 	border: 1px solid #E4E8F8;
@@ -1008,7 +989,6 @@ input[type=file] {
 	background: url(images/drop.png) no-repeat 5px 10px;
 }
 
-.basedir .directory-drop-hover a {}
 
 #directory-container .basedir ul .directory-drop-hover a {
 	color: #009900;
