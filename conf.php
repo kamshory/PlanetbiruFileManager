@@ -1,5 +1,8 @@
 <?php
-if(!isset($cfg)) $cfg = new StdClass();
+if(!isset($cfg)) 
+{
+	$cfg = new StdClass();
+}
 $cfg->authentification_needed = true;		
 /* When Kams File Manager is used on online system, it must be set true.*/
 $cfg->rootdir = dirname((__FILE__))."/content/upload";	 
@@ -47,24 +50,20 @@ $cfg->forbidden_extension = array();
    
    
 */
-if(strlen(@$cfg->rootdir))
+if(strlen(@$cfg->rootdir) && !file_exists($cfg->rootdir))
 {
-	if(strlen(@$cfg->rootdir))
-	{
-		if(!file_exists($cfg->rootdir))
-		{
-			mkdir($cfg->rootdir);
-		}
-	}
+	mkdir($cfg->rootdir);
 }
 
 
 $cfg->users = '';
 
-if(file_exists(dirname(__FILE__)."/.htpasswd"))
+$htpasswdPath = dirname(__FILE__)."/.htpasswd";
+
+if(file_exists($htpasswdPath))
 {
 	$cfg->users = array();
-	$row = file(dirname(__FILE__)."/.htpasswd");
+	$row = file($htpasswdPath);
 	foreach($row as $idx=>$line)
 	{
 		$row[$idx] = trim($line, " \r\n\t ");
@@ -74,12 +73,10 @@ if(file_exists(dirname(__FILE__)."/.htpasswd"))
 else
 {
 	$cfg->users = 'administrator:$apr1$ZlYfGv7V$0cAZNh8Si4WKBgY5H1mS1/';
-	file_put_contents(dirname(__FILE__)."/.htpasswd", $cfg->users);
+	file_put_contents($htpasswdPath, $cfg->users);
 }
 /*
 0 = username
 1 = password
 2 = type of password (plain, md5, sha1)
 */
-
-?>
