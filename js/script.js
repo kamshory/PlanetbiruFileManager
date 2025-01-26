@@ -199,7 +199,7 @@ function contextMenu(selector, menu) {
 		let width = parseInt($(window).width());
 		let height = parseInt($(window).height());
 		$('.kams-context-menu').remove();
-		html = '<div class="kams-context-menu"></div>';
+		html = `<div class="kams-context-menu"></div>`;
 		$('body').append(html);
 		html = '<ul>';
 		for (let i in menu) {
@@ -208,7 +208,13 @@ function contextMenu(selector, menu) {
 				if (clipboardfile.operation == '' && (classname == 'empty-clipboard' || classname == 'paste')) {
 					continue;
 				}
-				if (classname == 'copy' || classname == 'cut' || classname == 'move' || classname == 'delete' || classname == 'compress' || classname == 'permission' || classname == 'uncheck') {
+				if (classname == 'copy' 
+					|| classname == 'cut' 
+					|| classname == 'move' 
+					|| classname == 'delete' 
+					|| classname == 'compress' 
+					|| classname == 'permission' 
+					|| classname == 'uncheck') {
 					if ($('.fileid:checked').length == 0) {
 						continue;
 					}
@@ -217,7 +223,11 @@ function contextMenu(selector, menu) {
 					continue;
 				}
 			}
-			html += '<li class="file-function file-function-' + classname + '"><a href="' + menu[i]['linkurl'] + '">' + menu[i]['caption'] + '</a></li>';
+			html += `
+  <li class="file-function file-function-${classname}">
+    <a href="${menu[i]['linkurl']}">${menu[i]['caption']}</a>
+  </li>`;
+
 		}
 		html += '</ul>';
 		$('.kams-context-menu').html(html);
@@ -304,162 +314,97 @@ function initContextMenuDir() {
 	});
 }
 
+function createContextMenu(items) {
+    return items.map(item => ({
+        caption: item.caption,
+        linkurl: `javascript:${item.action}`,
+        classname: item.classname
+    }));
+}
+
 function contextMenuListFile(filetype, filepath, fileurl, attr) {
-	filepath = addslashes(filepath);
-	fileurl = addslashes(fileurl);
-	let width = '0';
-	let height = '0';
-	let cm;
-	if (filetype.indexOf('image') == 0) {
-		width = parseInt(attr['width']);
-		height = parseInt(attr['height']);
-		cm = [
-			{ 'caption': 'Select File', 'linkurl': 'javascript:selectFile(\'' + fileurl + '\')', 'classname': 'select' },
-			{ 'caption': 'Copy File', 'linkurl': 'javascript:copyFile(\'' + filepath + '\')', 'classname': 'copy' },
-			{ 'caption': 'Cut File', 'linkurl': 'javascript:cutFile(\'' + filepath + '\')', 'classname': 'cut' },
-			{ 'caption': 'Rename File', 'linkurl': 'javascript:renameFile(\'' + filepath + '\')', 'classname': 'rename' },
-			{ 'caption': 'Move File', 'linkurl': 'javascript:moveFile(\'' + filepath + '\')', 'classname': 'move' },
-			{ 'caption': 'Delete File', 'linkurl': 'javascript:deleteFile(\'' + filepath + '\')', 'classname': 'delete' },
-			{ 'caption': 'Preview Image', 'linkurl': 'javascript:previewFile(\'' + fileurl + '\', ' + width + ', ' + height + ', false, true)', 'classname': 'preview' },
-			{ 'caption': 'Edit Image', 'linkurl': 'javascript:editImage(\'' + filepath + '\')', 'classname': 'edit-image' },
-			{ 'caption': 'Compress File', 'linkurl': 'javascript:compressFile(\'' + filepath + '\')', 'classname': 'compress' },
-			{ 'caption': 'Set Permission', 'linkurl': 'javascript:changePermission(\'' + filepath + '\')', 'classname': 'permission' },
-			{ 'caption': 'Download File', 'linkurl': fileurl + '" target="_blank', 'classname': 'download' },
-			{ 'caption': 'Force Download File', 'linkurl': 'javascript:forceDownloadFile(\'' + filepath + '\')', 'classname': 'download' },
-			{ 'caption': 'Image Properties', 'linkurl': 'javascript:propertyImage(\'' + filepath + '\')', 'classname': 'property' }
-		];
-	}
-	else if (filetype.indexOf('video') == 0) {
-		cm = [
-			{ 'caption': 'Select File', 'linkurl': 'javascript:selectFile(\'' + fileurl + '\')', 'classname': 'select' },
-			{ 'caption': 'Copy File', 'linkurl': 'javascript:copyFile(\'' + filepath + '\')', 'classname': 'copy' },
-			{ 'caption': 'Cut File', 'linkurl': 'javascript:cutFile(\'' + filepath + '\')', 'classname': 'cut' },
-			{ 'caption': 'Rename File', 'linkurl': 'javascript:renameFile(\'' + filepath + '\')', 'classname': 'rename' },
-			{ 'caption': 'Move File', 'linkurl': 'javascript:moveFile(\'' + filepath + '\')', 'classname': 'move' },
-			{ 'caption': 'Delete File', 'linkurl': 'javascript:deleteFile(\'' + filepath + '\')', 'classname': 'delete' },
-			{ 'caption': 'Play Video', 'linkurl': 'javascript:playVideo(\'' + fileurl + '\', \'html5\')', 'classname': 'play' },
-			{ 'caption': 'Compress File', 'linkurl': 'javascript:compressFile(\'' + filepath + '\')', 'classname': 'compress' },
-			{ 'caption': 'Set Permission', 'linkurl': 'javascript:changePermission(\'' + filepath + '\')', 'classname': 'permission' },
-			{ 'caption': 'Download File', 'linkurl': fileurl + '" target="_blank', 'classname': 'download' },
-			{ 'caption': 'Force Download File', 'linkurl': 'javascript:forceDownloadFile(\'' + filepath + '\')', 'classname': 'download' },
-			{ 'caption': 'Video Properties', 'linkurl': 'javascript:propertyVideo(\'' + filepath + '\')', 'classname': 'property' }
-		];
-	}
-	else if (filetype.indexOf('audio') == 0) {
-		cm = [
-			{ 'caption': 'Select File', 'linkurl': 'javascript:selectFile(\'' + fileurl + '\')', 'classname': 'select' },
-			{ 'caption': 'Copy File', 'linkurl': 'javascript:copyFile(\'' + filepath + '\')', 'classname': 'copy' },
-			{ 'caption': 'Cut File', 'linkurl': 'javascript:cutFile(\'' + filepath + '\')', 'classname': 'cut' },
-			{ 'caption': 'Rename File', 'linkurl': 'javascript:renameFile(\'' + filepath + '\')', 'classname': 'rename' },
-			{ 'caption': 'Move File', 'linkurl': 'javascript:moveFile(\'' + filepath + '\')', 'classname': 'move' },
-			{ 'caption': 'Delete File', 'linkurl': 'javascript:deleteFile(\'' + filepath + '\')', 'classname': 'delete' },
-			{ 'caption': 'Play Audio', 'linkurl': 'javascript:playAudio(\'' + fileurl + '\', \'html5\')', 'classname': 'play' },
-			{ 'caption': 'Compress File', 'linkurl': 'javascript:compressFile(\'' + filepath + '\')', 'classname': 'compress' },
-			{ 'caption': 'Set Permission', 'linkurl': 'javascript:changePermission(\'' + filepath + '\')', 'classname': 'permission' },
-			{ 'caption': 'Download File', 'linkurl': fileurl + '" target="_blank', 'classname': 'download' },
-			{ 'caption': 'Force Download File', 'linkurl': 'javascript:forceDownloadFile(\'' + filepath + '\')', 'classname': 'download' },
-			{ 'caption': 'File Properties', 'linkurl': 'javascript:propertyFile(\'' + filepath + '\')', 'classname': 'property' }
-		];
-	}
-	else if (filetype.indexOf('pdf') != -1) {
-		cm = [
-			{ 'caption': 'Select File', 'linkurl': 'javascript:selectFile(\'' + fileurl + '\')', 'classname': 'select' },
-			{ 'caption': 'Copy File', 'linkurl': 'javascript:copyFile(\'' + filepath + '\')', 'classname': 'copy' },
-			{ 'caption': 'Cut File', 'linkurl': 'javascript:cutFile(\'' + filepath + '\')', 'classname': 'cut' },
-			{ 'caption': 'Rename File', 'linkurl': 'javascript:renameFile(\'' + filepath + '\')', 'classname': 'rename' },
-			{ 'caption': 'Move File', 'linkurl': 'javascript:moveFile(\'' + filepath + '\')', 'classname': 'move' },
-			{ 'caption': 'Delete File', 'linkurl': 'javascript:deleteFile(\'' + filepath + '\')', 'classname': 'delete' },
-			{ 'caption': 'Read PDF Document', 'linkurl': 'javascript:previewPDF(\'' + fileurl + '\')', 'classname': 'preview' },
-			{ 'caption': 'Compress File', 'linkurl': 'javascript:compressFile(\'' + filepath + '\')', 'classname': 'compress' },
-			{ 'caption': 'Set Permission', 'linkurl': 'javascript:changePermission(\'' + filepath + '\')', 'classname': 'permission' },
-			{ 'caption': 'Download File', 'linkurl': fileurl + '" target="_blank', 'classname': 'download' },
-			{ 'caption': 'Force Download File', 'linkurl': 'javascript:forceDownloadFile(\'' + filepath + '\')', 'classname': 'download' },
-			{ 'caption': 'File Properties', 'linkurl': 'javascript:propertyFile(\'' + filepath + '\')', 'classname': 'property' }
-		];
-	}
-	else if (filetype.indexOf('shockwave') != -1) {
-		width = parseInt(attr['width']);
-		height = parseInt(attr['height']);
-		cm = [
-			{ 'caption': 'Select File', 'linkurl': 'javascript:selectFile(\'' + fileurl + '\')', 'classname': 'select' },
-			{ 'caption': 'Copy File', 'linkurl': 'javascript:copyFile(\'' + filepath + '\')', 'classname': 'copy' },
-			{ 'caption': 'Cut File', 'linkurl': 'javascript:cutFile(\'' + filepath + '\')', 'classname': 'cut' },
-			{ 'caption': 'Rename File', 'linkurl': 'javascript:renameFile(\'' + filepath + '\')', 'classname': 'rename' },
-			{ 'caption': 'Move File', 'linkurl': 'javascript:moveFile(\'' + filepath + '\')', 'classname': 'move' },
-			{ 'caption': 'Delete File', 'linkurl': 'javascript:deleteFile(\'' + filepath + '\')', 'classname': 'delete' },
-			{ 'caption': 'View Shock Wave', 'linkurl': 'javascript:previewSWF(\'' + fileurl + '\', ' + width + ', ' + height + ')', 'classname': 'preview' },
-			{ 'caption': 'Compress File', 'linkurl': 'javascript:compressFile(\'' + filepath + '\')', 'classname': 'compress' },
-			{ 'caption': 'Set Permission', 'linkurl': 'javascript:changePermission(\'' + filepath + '\')', 'classname': 'permission' },
-			{ 'caption': 'Download File', 'linkurl': fileurl + '" target="_blank', 'classname': 'download' },
-			{ 'caption': 'Force Download File', 'linkurl': 'javascript:forceDownloadFile(\'' + filepath + '\')', 'classname': 'download' },
-			{ 'caption': 'File Properties', 'linkurl': 'javascript:propertyFile(\'' + filepath + '\')', 'classname': 'property' }
-		];
-	}
-	else if (filetype.indexOf('application/zip') == 0) {
-		cm = [
-			{ 'caption': 'Select File', 'linkurl': 'javascript:selectFile(\'' + fileurl + '\')', 'classname': 'select' },
-			{ 'caption': 'Copy File', 'linkurl': 'javascript:copyFile(\'' + filepath + '\')', 'classname': 'copy' },
-			{ 'caption': 'Cut File', 'linkurl': 'javascript:cutFile(\'' + filepath + '\')', 'classname': 'cut' },
-			{ 'caption': 'Rename File', 'linkurl': 'javascript:renameFile(\'' + filepath + '\')', 'classname': 'rename' },
-			{ 'caption': 'Move File', 'linkurl': 'javascript:moveFile(\'' + filepath + '\')', 'classname': 'move' },
-			{ 'caption': 'Delete File', 'linkurl': 'javascript:deleteFile(\'' + filepath + '\')', 'classname': 'delete' },
-			{ 'caption': 'Extract File', 'linkurl': 'javascript:extractFile(\'' + filepath + '\')', 'classname': 'extract' },
-			{ 'caption': 'Set Permission', 'linkurl': 'javascript:changePermission(\'' + filepath + '\')', 'classname': 'permission' },
-			{ 'caption': 'Download File', 'linkurl': fileurl + '" target="_blank', 'classname': 'download' },
-			{ 'caption': 'Force Download File', 'linkurl': 'javascript:forceDownloadFile(\'' + filepath + '\')', 'classname': 'download' },
-			{ 'caption': 'File Properties', 'linkurl': 'javascript:propertyFile(\'' + filepath + '\')', 'classname': 'property' }
-		];
-	}
-	else if (filetype.indexOf('text') == 0 || filetype.indexOf('php') != -1) {
-		cm = [
-			{ 'caption': 'Select File', 'linkurl': 'javascript:selectFile(\'' + fileurl + '\')', 'classname': 'select' },
-			{ 'caption': 'Copy File', 'linkurl': 'javascript:copyFile(\'' + filepath + '\')', 'classname': 'copy' },
-			{ 'caption': 'Cut File', 'linkurl': 'javascript:cutFile(\'' + filepath + '\')', 'classname': 'cut' },
-			{ 'caption': 'Rename File', 'linkurl': 'javascript:renameFile(\'' + filepath + '\')', 'classname': 'rename' },
-			{ 'caption': 'Move File', 'linkurl': 'javascript:moveFile(\'' + filepath + '\')', 'classname': 'move' },
-			{ 'caption': 'Delete File', 'linkurl': 'javascript:deleteFile(\'' + filepath + '\')', 'classname': 'delete' },
-			{ 'caption': 'Edit as Text', 'linkurl': 'javascript:editFile(\'' + filepath + '\')', 'classname': 'edit' },
-			{ 'caption': 'Edit Code', 'linkurl': 'code-editor.php?filepath=' + encodeURIComponent(filepath) + '" target="_blank', 'classname': 'edit' },
-			{ 'caption': 'Compress File', 'linkurl': 'javascript:compressFile(\'' + filepath + '\')', 'classname': 'compress' },
-			{ 'caption': 'Set Permission', 'linkurl': 'javascript:changePermission(\'' + filepath + '\')', 'classname': 'permission' },
-			{ 'caption': 'Download File', 'linkurl': fileurl + '" target="_blank', 'classname': 'download' },
-			{ 'caption': 'Force Download File', 'linkurl': 'javascript:forceDownloadFile(\'' + filepath + '\')', 'classname': 'download' },
-			{ 'caption': 'File Properties', 'linkurl': 'javascript:propertyFile(\'' + filepath + '\')', 'classname': 'property' }
-		];
-	}
-	else {
-		cm = [
-			{ 'caption': 'Select File', 'linkurl': 'javascript:selectFile(\'' + fileurl + '\')', 'classname': 'select' },
-			{ 'caption': 'Copy File', 'linkurl': 'javascript:copyFile(\'' + filepath + '\')', 'classname': 'copy' },
-			{ 'caption': 'Cut File', 'linkurl': 'javascript:cutFile(\'' + filepath + '\')', 'classname': 'cut' },
-			{ 'caption': 'Rename File', 'linkurl': 'javascript:renameFile(\'' + filepath + '\')', 'classname': 'rename' },
-			{ 'caption': 'Move File', 'linkurl': 'javascript:moveFile(\'' + filepath + '\')', 'classname': 'move' },
-			{ 'caption': 'Delete File', 'linkurl': 'javascript:deleteFile(\'' + filepath + '\')', 'classname': 'delete' },
-			{ 'caption': 'Compress File', 'linkurl': 'javascript:compressFile(\'' + filepath + '\')', 'classname': 'compress' },
-			{ 'caption': 'Set Permission', 'linkurl': 'javascript:changePermission(\'' + filepath + '\')', 'classname': 'permission' },
-			{ 'caption': 'Download File', 'linkurl': fileurl + '" target="_blank', 'classname': 'download' },
-			{ 'caption': 'Force Download File', 'linkurl': 'javascript:forceDownloadFile(\'' + filepath + '\')', 'classname': 'download' },
-			{ 'caption': 'File Properties', 'linkurl': 'javascript:propertyFile(\'' + filepath + '\')', 'classname': 'property' }
-		];
-	}
-	return cm;
+    filepath = addslashes(filepath);
+    fileurl = addslashes(fileurl);
+    let width = attr?.width ? parseInt(attr.width) : 0;
+    let height = attr?.height ? parseInt(attr.height) : 0;
+
+    const baseActions = [
+        { caption: 'Select File', action: `selectFile('${fileurl}')`, classname: 'select' },
+        { caption: 'Copy File', action: `copyFile('${filepath}')`, classname: 'copy' },
+        { caption: 'Cut File', action: `cutFile('${filepath}')`, classname: 'cut' },
+        { caption: 'Rename File', action: `renameFile('${filepath}')`, classname: 'rename' },
+        { caption: 'Move File', action: `moveFile('${filepath}')`, classname: 'move' },
+        { caption: 'Delete File', action: `deleteFile('${filepath}')`, classname: 'delete' },
+        { caption: 'Compress File', action: `compressFile('${filepath}')`, classname: 'compress' },
+        { caption: 'Set Permission', action: `changePermission('${filepath}')`, classname: 'permission' },
+        { caption: 'Download File', action: `${fileurl}" target="_blank`, classname: 'download' },
+        { caption: 'Force Download File', action: `forceDownloadFile('${filepath}')`, classname: 'download' }
+    ];
+
+    let typeSpecificActions = [];
+
+    if (filetype.startsWith('image')) {
+        typeSpecificActions = [
+            { caption: 'Preview Image', action: `previewFile('${fileurl}', ${width}, ${height}, false, true)`, classname: 'preview' },
+            { caption: 'Edit Image', action: `editImage('${filepath}')`, classname: 'edit-image' },
+            { caption: 'Image Properties', action: `propertyImage('${filepath}')`, classname: 'property' }
+        ];
+    } else if (filetype.startsWith('video')) {
+        typeSpecificActions = [
+            { caption: 'Play Video', action: `playVideo('${fileurl}', 'html5')`, classname: 'play' },
+            { caption: 'Video Properties', action: `propertyVideo('${filepath}')`, classname: 'property' }
+        ];
+    } else if (filetype.startsWith('audio')) {
+        typeSpecificActions = [
+            { caption: 'Play Audio', action: `playAudio('${fileurl}', 'html5')`, classname: 'play' },
+            { caption: 'File Properties', action: `propertyFile('${filepath}')`, classname: 'property' }
+        ];
+    } else if (filetype.includes('pdf')) {
+        typeSpecificActions = [
+            { caption: 'Read PDF Document', action: `previewPDF('${fileurl}')`, classname: 'preview' },
+            { caption: 'File Properties', action: `propertyFile('${filepath}')`, classname: 'property' }
+        ];
+    } else if (filetype.includes('shockwave')) {
+        typeSpecificActions = [
+            { caption: 'View Shock Wave', action: `previewSWF('${fileurl}', ${width}, ${height})`, classname: 'preview' },
+            { caption: 'File Properties', action: `propertyFile('${filepath}')`, classname: 'property' }
+        ];
+    } else if (filetype === 'application/zip') {
+        typeSpecificActions = [
+            { caption: 'Extract File', action: `extractFile('${filepath}')`, classname: 'extract' },
+            { caption: 'File Properties', action: `propertyFile('${filepath}')`, classname: 'property' }
+        ];
+    } else if (filetype.startsWith('text') || filetype.includes('php')) {
+        typeSpecificActions = [
+            { caption: 'Edit as Text', action: `editFile('${filepath}')`, classname: 'edit' },
+            { caption: 'Edit Code', action: `code-editor.php?filepath=${encodeURIComponent(filepath)}" target="_blank`, classname: 'edit' },
+            { caption: 'File Properties', action: `propertyFile('${filepath}')`, classname: 'property' }
+        ];
+    } else {
+        typeSpecificActions = [
+            { caption: 'File Properties', action: `propertyFile('${filepath}')`, classname: 'property' }
+        ];
+    }
+
+    return createContextMenu([...baseActions, ...typeSpecificActions]);
 }
+
 function contextMenuListDir(filepath) {
-	filepath = addslashes(filepath);
-	let cm;
-	cm = [
-		{ 'caption': 'Open Directory', 'linkurl': 'javascript:;" onClick="return openDir(\'' + filepath + '\')', 'classname': 'open' },
-		{ 'caption': 'Copy Directory', 'linkurl': 'javascript:copyFile(\'' + filepath + '\')', 'classname': 'copy' },
-		{ 'caption': 'Rename Directory', 'linkurl': 'javascript:renameFile(\'' + filepath + '\', true)', 'classname': 'rename' },
-		{ 'caption': 'Cut Directory', 'linkurl': 'javascript:cutFile(\'' + filepath + '\')', 'classname': 'cut' },
-		{ 'caption': 'Move Directory', 'linkurl': 'javascript:moveFile(\'' + filepath + '\', true)', 'classname': 'move' },
-		{ 'caption': 'Delete Directory', 'linkurl': 'javascript:deleteDirectory(\'' + filepath + '\')', 'classname': 'delete' },
-		{ 'caption': 'Compress Directory', 'linkurl': 'javascript:compressFile(\'' + filepath + '\')', 'classname': 'compress' },
-		{ 'caption': 'Set Permission', 'linkurl': 'javascript:changePermission(\'' + filepath + '\')', 'classname': 'permission' },
-		{ 'caption': 'Directory Properties', 'linkurl': 'javascript:propertyDir(\'' + filepath + '\')', 'classname': 'property' }
-	];
-	return cm;
+    filepath = addslashes(filepath);
+    const dirActions = [
+        { caption: 'Open Directory', action: `openDir('${filepath}')`, classname: 'open' },
+        { caption: 'Copy Directory', action: `copyFile('${filepath}')`, classname: 'copy' },
+        { caption: 'Rename Directory', action: `renameFile('${filepath}', true)`, classname: 'rename' },
+        { caption: 'Cut Directory', action: `cutFile('${filepath}')`, classname: 'cut' },
+        { caption: 'Move Directory', action: `moveFile('${filepath}', true)`, classname: 'move' },
+        { caption: 'Delete Directory', action: `deleteDirectory('${filepath}')`, classname: 'delete' },
+        { caption: 'Compress Directory', action: `compressFile('${filepath}')`, classname: 'compress' },
+        { caption: 'Set Permission', action: `changePermission('${filepath}')`, classname: 'permission' },
+        { caption: 'Directory Properties', action: `propertyDir('${filepath}')`, classname: 'property' }
+    ];
+    return createContextMenu(dirActions);
 }
+
 let skipondrop = false;
 // file function
 function goToUpDir() {

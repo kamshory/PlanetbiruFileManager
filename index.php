@@ -14,8 +14,7 @@ if (!is_dir(PlanetbiruFileManager::path_decode($dir, $cfg->rootdir))) {
 if (!$dir) {
   $dir =  'base';
 }
-?>
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
@@ -23,13 +22,13 @@ if (!$dir) {
   <title>Planetbiru File Manager</title>
   <link rel="shortcut icon" href="style/images/icon.png" type="image/jpeg" />
   <link rel="stylesheet" type="text/css" href="js/jquery/jquery-ui.min.css">
-  <link rel="stylesheet" type="text/css" href="style/file-type.css" />
-  <link rel="stylesheet" type="text/css" href="style/style.css" />
+  <link rel="stylesheet" type="text/css" href="style/file-type.min.css" />
+  <link rel="stylesheet" type="text/css" href="style/style.min.css" />
   <script type="text/javascript" src="js/script.js"></script>
   <script type="text/javascript" src="js/jquery/jquery.min.js"></script>
   <script type="text/javascript" src="js/jquery/jquery-ui.min.js"></script>
   <script type="text/javascript" src="js/jquery/jquery-ui.datetimepicker.addon.min.js"></script>
-  <script type="text/javascript" src="js/overlay-dialog.js"></script>
+  <script type="text/javascript" src="js/overlay-dialog.min.js"></script>
   <script type="text/javascript">
     var vrel = '<?php echo $cfg->rooturl; ?>/';
     var vabs = 'base/';
