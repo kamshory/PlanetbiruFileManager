@@ -1,17 +1,31 @@
 <?php
 
+/**
+ * Class HTPasswd
+ *
+ * A class for handling password hashing and authentication using MD5 (APR1) and SHA1 encryption.
+ */
 class HTPasswd
 {
 	const APRMD5_ALPHABET = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 	const BASE64_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-	public static function hash($mdp, $salt = null)
+	
+	/**
+     * Hashes a password using the Apache MD5 APR1 hashing algorithm.
+     *
+     * @param string $mdp The plain text password.
+     * @param string|null $salt An optional salt value. If not provided, a new one will be generated.
+     *
+     * @return string The hashed password in APR1 format.
+     */
+	public static function hash($mdp, $salt = null) // NOSONAR
 	{
 		if (is_null($salt)) {
 			$salt = self::salt();
 		}
 		$salt = substr($salt, 0, 8);
 		$max = strlen($mdp);
-		$context = $mdp . '$apr1$' . $salt;
+		$context = $mdp . '$apr1$' . $salt; // NOSONAR
 		$binary = pack('H32', md5($mdp . $salt . $mdp));
 		for ($i = $max; $i > 0; $i -= 16) {
 			$context .= substr($binary, 0, min(16, $i));
@@ -48,7 +62,12 @@ class HTPasswd
 		);
 		return '$apr1$' . $salt . '$' . $hash;
 	}
-	// 8 character salts are the best. Don't encourage anything but the best.
+
+	/**
+     * Generates a random salt using the APR-MD5 alphabet.
+     *
+     * @return string A randomly generated 8-character salt.
+     */
 	public static function salt()
 	{
 		$alphabet = self::APRMD5_ALPHABET;
@@ -59,16 +78,42 @@ class HTPasswd
 		}
 		return $salt;
 	}
+
+	/**
+     * Verifies a plain text password against an APR1 hashed password.
+     *
+     * @param string $plain The plain text password.
+     * @param string $hash The hashed password to compare against.
+     *
+     * @return bool True if the password matches the hash, false otherwise.
+     */
 	public static function check($plain, $hash)
 	{
 		$parts = explode('$', $hash);
 		return self::hash($plain, $parts[2]) === $hash;
 	}
+
+	/**
+     * Hashes a password using the SHA1 algorithm.
+     *
+     * @param string $password The plain text password.
+     *
+     * @return string The SHA1 hashed password in the "{SHA}" format.
+     */
 	public static function crypt_sha1($password)
 	{
 		return "{SHA}" . base64_encode(hex2bin(sha1($password)));
 	}
 
+	/**
+     * Authenticates a user by their username and password against stored credentials.
+     *
+     * @param string $username The username to authenticate.
+     * @param string $password The plain text password.
+     * @param string $stored The stored credentials in the format of a .htpasswd file.
+     *
+     * @return bool True if the username and password are valid, false otherwise.
+     */
 	public static function auth($username, $password, $stored)
 	{
 		$buff = $stored;

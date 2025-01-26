@@ -31,7 +31,7 @@ class ListFile {
      *
      * @param string $location Path of the directory to scan.
      */
-    public function findAll($location)
+    public function findAll($location) // NOSONAR
     {        
         // Ensure the location exists and is a directory
         if (file_exists($location) && $handle = opendir($location)) {

@@ -2,6 +2,8 @@
 include_once dirname(__FILE__) . "/functions.php";
 include_once dirname(__FILE__) . "/auth.php";
 include dirname(__FILE__) . "/conf.php"; //NOSONAR
+$notInstalled = 'Not Installed';
+$installed = 'Installed';
 if ($cfg->authentification_needed && !$userlogin) {
   exit();
 }
@@ -25,15 +27,15 @@ if ($cfg->authentification_needed && !$userlogin) {
   </tr>
   <tr>
     <td>PHP-ZIP</td>
-    <td><?php echo class_exists('ZipArchive') ? 'Installed' : 'Not Installed'; ?> (Required)</td>
+    <td><?php echo class_exists('ZipArchive') ? $installed : $notInstalled; ?> (Required)</td>
   </tr>
   <tr>
     <td>PHP-GD</td>
-    <td><?php echo function_exists('imagecreate') ? 'Installed' : 'Not Installed'; ?> (Required)</td>
+    <td><?php echo function_exists('imagecreate') ? $installed : $notInstalled; ?> (Required)</td>
   </tr>
   <tr>
     <td>PHP-EXIF</td>
-    <td><?php echo function_exists('exif_read_data') ? 'Installed' : 'Not Installed'; ?> (Optional)</td>
+    <td><?php echo function_exists('exif_read_data') ? $installed : $notInstalled; ?> (Optional)</td>
   </tr>
   <tr>
     <td>Authentification</td>
