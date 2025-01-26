@@ -77,11 +77,11 @@ class ListFile {
      */
     private function processFile($fn, $cfg)
     {
-        $ft = getMIMEType($fn);
+        $ft = PlanetbiruFileManager::getMIMEType($fn);
         $obj = array();
-        $obj['url'] = $cfg->rooturl . '/' . substr(path_encode($fn, $cfg->rootdir), 5);
-        $obj['path'] = path_encode($fn, $cfg->rootdir);
-        $obj['location'] = path_encode(dirname($fn), $cfg->rootdir);
+        $obj['url'] = $cfg->rooturl . '/' . substr(PlanetbiruFileManager::path_encode($fn, $cfg->rootdir), 5);
+        $obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
+        $obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
         $obj['name'] = basename($fn);
         $fs = filesize($fn);
         $obj['filesize'] = $fs;
@@ -147,8 +147,8 @@ class ListFile {
     private function processDirectory($fn, $cfg)
     {
         $obj = array();
-        $obj['path'] = path_encode($fn, $cfg->rootdir);
-        $obj['location'] = path_encode(dirname($fn), $cfg->rootdir);
+        $obj['path'] = PlanetbiruFileManager::path_encode($fn, $cfg->rootdir);
+        $obj['location'] = PlanetbiruFileManager::path_encode(dirname($fn), $cfg->rootdir);
         $obj['name'] = basename($fn);
         $obj['type'] = 'dir';
         $obj['permission'] = substr(sprintf('%o', fileperms($fn)), -4);
