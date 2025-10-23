@@ -189,16 +189,16 @@ if (!empty($arrdir) || !empty($arrfile)) {
 
 
 	?>
-		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="file-table">
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="file-table table table-sm table-hover">
 			<thead>
 				<tr>
-					<td width="8"><input type="checkbox" name="control-fileid" id="control-fileid" class="input-checkbox checkbox-selector" value="1"></td>
-					<td class="sort-holder" data-sortby="type" data-sortorder="<?php echo $sort_order['type']; ?>" width="16" title="Sort by MIME Type<?php echo ($sort_order['type'] == 'desc') ? ' Descending' : ' Ascending'; ?>">Icon</td>
-					<td class="sort-holder" data-sortby="name" data-sortorder="<?php echo $sort_order['name']; ?>" title="Sort by File Name<?php echo ($sort_order['name'] == 'desc') ? ' Descending' : ' Ascending'; ?>">File Name</td>
-					<td class="sort-holder" data-sortby="filesize" data-sortorder="<?php echo $sort_order['filesize']; ?>" width="60" align="right" title="Sort by File Size<?php echo ($sort_order['filesize'] == 'desc') ? ' Descending' : ' Ascending'; ?>">Size</td>
-					<td class="sort-holder" data-sortby="type" data-sortorder="<?php echo $sort_order['type']; ?>" width="70" title="Sort by MIME Type<?php echo ($sort_order['type'] == 'desc') ? ' Descending' : ' Ascending'; ?>">MIME Type</td>
-					<td class="sort-holder" data-sortby="permission" data-sortorder="<?php echo $sort_order['permission']; ?>" width="40" title="Sort by Permission<?php echo ($sort_order['permission'] == 'desc') ? ' Descending' : ' Ascending'; ?>">Perms</td>
-					<td class="sort-holder" data-sortby="filemtime" data-sortorder="<?php echo $sort_order['filemtime']; ?>" width="60" title="Sort by Time<?php echo ($sort_order['filemtime'] == 'desc') ? ' Descending' : ' Ascending'; ?>">Modified</td>
+					<th width="8"><input type="checkbox" name="control-fileid" id="control-fileid" class="input-checkbox checkbox-selector" value="1"></th>
+					<th class="sort-holder" data-sortby="type" data-sortorder="<?php echo $sort_order['type']; ?>" width="16" title="Sort by MIME Type<?php echo ($sort_order['type'] == 'desc') ? ' Descending' : ' Ascending'; ?>">Icon</th>
+					<th class="sort-holder" data-sortby="name" data-sortorder="<?php echo $sort_order['name']; ?>" title="Sort by File Name<?php echo ($sort_order['name'] == 'desc') ? ' Descending' : ' Ascending'; ?>">File Name</th>
+					<th class="sort-holder text-right" data-sortby="filesize" data-sortorder="<?php echo $sort_order['filesize']; ?>" width="60" align="right" title="Sort by File Size<?php echo ($sort_order['filesize'] == 'desc') ? ' Descending' : ' Ascending'; ?>">Size</th>
+					<th class="sort-holder" data-sortby="type" data-sortorder="<?php echo $sort_order['type']; ?>" width="70" title="Sort by MIME Type<?php echo ($sort_order['type'] == 'desc') ? ' Descending' : ' Ascending'; ?>">MIME Type</th>
+					<th class="sort-holder" data-sortby="permission" data-sortorder="<?php echo $sort_order['permission']; ?>" width="40" title="Sort by Permission<?php echo ($sort_order['permission'] == 'desc') ? ' Descending' : ' Ascending'; ?>">Perms</th>
+					<th class="sort-holder" data-sortby="filemtime" data-sortorder="<?php echo $sort_order['filemtime']; ?>" width="60" title="Sort by Time<?php echo ($sort_order['filemtime'] == 'desc') ? ' Descending' : ' Ascending'; ?>">Modified</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -209,11 +209,11 @@ if (!empty($arrdir) || !empty($arrfile)) {
 				?>
 					<tr class="row-data-dir row-<?php echo ($i % 2) ? 'odd' : 'even'; ?>" data-file-name="<?php echo $val['name']; ?>" data-file-location="<?php echo $val['location']; ?>" data-file-type="dir">
 						<td><input type="checkbox" class="input-checkbox fileid" data-isdir="true" name="fileid[]" id="fileid-<?php echo $i; ?>" value="<?php echo $val['path']; ?>" /></td>
-						<td><img src="style/images/trans16.gif" class="fileicon fileicon-dir" /></td>
+						<td><span class="fileicon fileicon-dir"></span></td>
 						<td><a href="javascript:;" onClick="return openDir('<?php echo str_replace("'", "\'", $val['path']); ?>')"><?php echo $val['name']; ?></a></td>
-						<td align="right"></td>
+						<td class="text-right"></td>
 						<td>dir</td>
-						<td><span class="permission-info"><?php echo $val['permission']; ?></span></td>
+						<td><span class="permission-info badge badge-info"><?php echo $val['permission']; ?></span></td>
 						<td><?php echo $val['filemtime']; ?></td>
 					</tr>
 				<?php
@@ -225,14 +225,14 @@ if (!empty($arrdir) || !empty($arrfile)) {
 				?>
 					<tr class="row-data-file row-<?php echo ($i % 2) ? 'odd' : 'even'; ?>" data-file-url="<?php echo $val['url']; ?>" data-file-name="<?php echo $val['name']; ?>" data-file-location="<?php echo $val['location']; ?>" data-file-type="<?php echo $val['type']; ?>" data-file-size="<?php echo $val['size']; ?>" data-image-width="<?php echo $val['image_width']; ?>" data-image-height="<?php echo $val['image_height']; ?>">
 						<td><input type="checkbox" class="input-checkbox fileid" data-isdir="false" data-iszip="<?php echo ($val['type'] == 'application/zip') ? 'true' : 'false'; ?>" name="fileid[]" id="fileid-<?php echo $i; ?>" value="<?php echo $val['path']; ?>" /></td>
-						<td><img src="style/images/trans16.gif" class="fileicon fileicon-<?php echo $val['extension']; ?>" /></td>
+						<td><span class="fileicon fileicon-<?php echo $val['extension']; ?>"></span></td>
 						<td><a href="javascript:;" onClick="return selectFile('<?php echo $val['url']; ?>')"><?php echo $val['name']; ?></a></td>
-						<td align="right"><?php echo $val['size']; ?></td>
+						<td class="text-right"><?php echo $val['size']; ?></td>
 						<td><?php if (strlen($val['type']) > 18) {
 								$val['type'] = '<span title="' . $val['type'] . '">' . substr($val['type'], 0, 18) . '&hellip;</span>';
 							}
 							echo ($val['type']) ? $val['type'] : $val['extension']; ?></td>
-						<td><span class="permission-info"><?php echo $val['permission']; ?></span></td>
+						<td><span class="permission-info badge badge-info"><?php echo $val['permission']; ?></span></td>
 						<td><?php echo $val['filemtime']; ?></td>
 					</tr>
 				<?php
@@ -244,7 +244,7 @@ if (!empty($arrdir) || !empty($arrfile)) {
 	}
 } else {
 	?>
-	<div class="message-info">No file or directory found.</div>
+	<div class="alert alert-info">No file or directory found.</div>
 <?php
 }
 ?>

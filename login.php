@@ -23,6 +23,7 @@ if(isset($_POST['username']) && isset($_POST['password']))
 			if(strlen(@$_POST['ref']))
 			{
 				$ref = @$_POST['ref'];
+				unset($_SESSION['login_error']);
 				header("Location: $ref");
 				exit();
 			}
@@ -37,6 +38,7 @@ if(isset($_POST['username']) && isset($_POST['password']))
 			if(strlen(@$_POST['ref']))
 			{
 				$ref = $_POST['ref'];
+				$_SESSION['login_error'] = "Username atau password salah.";
 				header("Location: $ref");
 				exit();
 			}

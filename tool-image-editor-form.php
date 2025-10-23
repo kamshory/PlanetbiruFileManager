@@ -28,7 +28,7 @@ if (file_exists($filepath)) {
               if (function_exists('imagecreatefromjpeg')) {
               ?>
                 <div class="image-editor-sidebar-inner">
-                  <div class="original-image"><img id="imageori" src="<?php echo htmlspecialchars(stripslashes($url)); ?>?rand=<?php echo mt_rand(111111, 999999); ?>" /></div>
+                  <div class="original-image"><img id="imageori" src="tool-image-loader.php?filepath=<?php echo $fileurl; ?>&amp;rand=<?php echo mt_rand(111111, 999999); ?>" /></div>
                   <div class="current-dimension">
                     <table width="165" border="0" cellspacing="0" cellpadding="0">
                       <tr>
@@ -88,7 +88,7 @@ if (file_exists($filepath)) {
             <div class="image-editor-mainbar">
               <div class="image-editor-mainbar-inner">
                 <div id="image-content">
-                  <img id="image2edit" src="<?php echo htmlspecialchars(stripslashes($url)); ?>?rand=<?php echo mt_rand(111111, 999999); ?>" />
+                  <img id="image2edit" src="tool-image-loader.php?filepath=<?php echo $fileurl; ?>&amp;rand=<?php echo mt_rand(111111, 999999); ?>" />
                 </div>
               </div>
             </div>

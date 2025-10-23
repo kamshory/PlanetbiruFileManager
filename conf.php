@@ -62,7 +62,7 @@ $htpasswdPath = dirname(__FILE__)."/.htpasswd";
 
 if(file_exists($htpasswdPath))
 {
-	$cfg->users = array();
+	$cfg->users = '';
 	$row = file($htpasswdPath);
 	foreach($row as $idx=>$line)
 	{

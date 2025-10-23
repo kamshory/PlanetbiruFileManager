@@ -83,44 +83,44 @@ function initPreviewImageUpload() {
 }
 function updateToolbarStatus() {
 	if (($('.fileid:checked').length == $('.fileid').length)) {
-		$('.toolbar-inner li a img.check').parent().parent().addClass('inactive');
+		$('.toolbar-inner .btn img.check').parent().addClass('inactive');
 	}
 	else {
-		$('.toolbar-inner li a img.check').parent().parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.check').parent().removeClass('inactive');
 	}
 
 	if (clipboardfile.operation == '') {
-		$('.toolbar-inner li a img.paste').parent().parent().addClass('inactive');
+		$('.toolbar-inner .btn img.paste').parent().addClass('inactive');
 	}
 	else {
-		$('.toolbar-inner li a img.paste').parent().parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.paste').parent().removeClass('inactive');
 	}
 
 	if ($('.fileid:checked').length == 0) {
-		$('.toolbar-inner li a img.uncheck').parent().parent().addClass('inactive');
-		$('.toolbar-inner li a img.copy').parent().parent().addClass('inactive');
-		$('.toolbar-inner li a img.cut').parent().parent().addClass('inactive');
-		$('.toolbar-inner li a img.move').parent().parent().addClass('inactive');
-		$('.toolbar-inner li a img.delete').parent().parent().addClass('inactive');
-		$('.toolbar-inner li a img.rename').parent().parent().addClass('inactive');
-		$('.toolbar-inner li a img.compress').parent().parent().addClass('inactive');
-		$('.toolbar-inner li a img.permission').parent().parent().addClass('inactive');
+		$('.toolbar-inner .btn img.uncheck').parent().addClass('inactive');
+		$('.toolbar-inner .btn img.copy').parent().addClass('inactive');
+		$('.toolbar-inner .btn img.cut').parent().addClass('inactive');
+		$('.toolbar-inner .btn img.move').parent().addClass('inactive');
+		$('.toolbar-inner .btn img.delete').parent().addClass('inactive');
+		$('.toolbar-inner .btn img.rename').parent().addClass('inactive');
+		$('.toolbar-inner .btn img.compress').parent().addClass('inactive');
+		$('.toolbar-inner .btn img.permission').parent().addClass('inactive');
 	}
 	else {
-		$('.toolbar-inner li a img.uncheck').parent().parent().removeClass('inactive');
-		$('.toolbar-inner li a img.copy').parent().parent().removeClass('inactive');
-		$('.toolbar-inner li a img.cut').parent().parent().removeClass('inactive');
-		$('.toolbar-inner li a img.move').parent().parent().removeClass('inactive');
-		$('.toolbar-inner li a img.delete').parent().parent().removeClass('inactive');
-		$('.toolbar-inner li a img.rename').parent().parent().removeClass('inactive');
-		$('.toolbar-inner li a img.compress').parent().parent().removeClass('inactive');
-		$('.toolbar-inner li a img.permission').parent().parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.uncheck').parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.copy').parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.cut').parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.move').parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.delete').parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.rename').parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.compress').parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.permission').parent().removeClass('inactive');
 	}
 	if ($('.row-data-file[data-file-type="application/zip"]').find('input[type=checkbox]:checked').length) {
-		$('.toolbar-inner li a img.extract').parent().parent().removeClass('inactive');
+		$('.toolbar-inner .btn img.extract').parent().removeClass('inactive');
 	}
 	else {
-		$('.toolbar-inner li a img.extract').parent().parent().addClass('inactive');
+		$('.toolbar-inner .btn img.extract').parent().addClass('inactive');
 	}
 	$(document).on('click', '.toolbar-inner li.inactive a', function () {
 		return false;
@@ -166,24 +166,23 @@ function setCheckRelation() {
 	});
 }
 function jqAlert(msg, title, width, height) {
-	$('#mb-area').remove();
-	$('body').append('<div id="mb-area" style="display:none;"><div id="message-box-dialog"><div id="message-box-dialog-inner"></div></div></div>');
-	if (!title) title = 'Alert';
-	if (!width) width = 300;
-	if (!height) height = 165;
-	try { $('#message-box-dialog').dialog('destroy'); } catch (e) { }
-	$('#message-box-dialog-inner').html(msg);
-	$('#message-box-dialog').dialog({
-		width: width,
-		height: height,
-		modal: true,
-		title: title,
-		buttons: {
-			'Close': function () {
-				try { $('#message-box-dialog').dialog('destroy'); } catch (e) { }
-			}
-		}
-	});
+	if (!title) {
+		title = 'Alert';
+	}
+	$('#common-dialog-title').text(title);
+	$('#common-dialog-inner').html(msg);
+	
+	let footer = '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
+	$('#common-dialog-footer').html(footer);
+
+	// Set modal size
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm'); // Reset size
+	if(width && width < 500) {
+		modalDialog.addClass('modal-sm');
+	}
+	
+	$('#common-dialog').modal('show');
 }
 function contextMenu(selector, menu) {
 	$(selector).on('contextmenu', function (e) // NOSONAR
@@ -225,7 +224,7 @@ function contextMenu(selector, menu) {
 			}
 			html += `
   <li class="file-function file-function-${classname}">
-    <a href="${menu[i]['linkurl']}">${menu[i]['caption']}</a>
+    <a href="${menu[i]['linkurl']}"${menu[i]['target'] || ''}>${menu[i]['caption']}</a>
   </li>`;
 
 		}
@@ -256,11 +255,10 @@ function contextMenu(selector, menu) {
 }
 
 function setSize() {
-	let wh = parseInt($(window).height());
-	let ww = parseInt($(window).width());
-	let sw = parseInt($('.directory-area').outerWidth()) + 20;
-	$('.directory-area, .file-area').css('height', (wh - 92) + 'px');
-	$('.file-area').css({ 'width': (ww - sw) + 'px', 'margin-left': (sw - 14) + 'px' });
+	const wh = parseInt($(window).height());
+	const topOffset = $('.file-manager-container').offset().top;
+	const newHeight = wh - topOffset;
+	$('.directory-area, .file-area').css('height', newHeight + 'px');
 }
 
 function initContextMenuFileArea() {
@@ -315,11 +313,16 @@ function initContextMenuDir() {
 }
 
 function createContextMenu(items) {
-    return items.map(item => ({
-        caption: item.caption,
-        linkurl: `javascript:${item.action}`,
-        classname: item.classname
-    }));
+    return items.map(item => {
+        let linkurl = item.isLink ? item.action : `javascript:${item.action}`;
+        let target = item.isLink ? ' target="_blank"' : '';
+        return {
+            caption: item.caption,
+            linkurl: linkurl,
+            classname: item.classname,
+            target: target
+        };
+    });
 }
 
 function contextMenuListFile(filetype, filepath, fileurl, attr) {
@@ -377,7 +380,7 @@ function contextMenuListFile(filetype, filepath, fileurl, attr) {
     } else if (filetype.startsWith('text') || filetype.includes('php')) {
         typeSpecificActions = [
             { caption: 'Edit as Text', action: `editFile('${filepath}')`, classname: 'edit' },
-            { caption: 'Edit Code', action: `code-editor.php?filepath=${encodeURIComponent(filepath)}" target="_blank`, classname: 'edit' },
+            { caption: 'Edit Code', action: `code-editor.php?filepath=${encodeURIComponent(filepath)}`, classname: 'edit', isLink: true },
             { caption: 'File Properties', action: `propertyFile('${filepath}')`, classname: 'property' }
         ];
     } else {
@@ -575,98 +578,73 @@ function previewSWF(url, width, height) {
 }
 function propertyFile(filepath) {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'File Properties',
-		width: 400,
-		height: 270,
-		buttons:
-		{
-			'Close': function () {
-				$(this).dialog('destroy');
-			}
-		}
-	});
+	$('#common-dialog-title').text('File Properties');
+	$('#common-dialog-footer').html('<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>');
+	
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
 	$.get('tool-property-file.php', { 'filepath': filepath }, function (answer) {
 		$('#common-dialog-inner').html(answer);
+		$('#common-dialog').modal('show');
+
 		let mime = $('.mime-type').attr('data-content');
 		if (mime == 'application/zip') {
-			$('.ui-dialog-buttonset').prepend('<button aria-disabled="false" role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="button"><span class="ui-button-text">Show Content</span></button>');
-			$('.ui-dialog-buttonset').find('button:first').attr('onclick', 'showZipContent(\'' + filepath + '\')');
+			let showContentBtn = '<button type="button" class="btn btn-primary" onclick="showZipContent(\'' + filepath + '\')">Show Content</button>';
+			$('#common-dialog-footer').prepend(showContentBtn);
 		}
 	});
 }
 function propertyImage(filepath) {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Image Properties',
-		width: 400,
-		height: 410,
-		buttons: {
-			'Close': function () {
-				$(this).dialog('destroy');
-			}
-		}
-	});
+	$('#common-dialog-title').text('Image Properties');
+	$('#common-dialog-footer').html('<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>');
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
 	$.get('tool-property-file.php', { 'filepath': filepath, 'type': 'image' }, function (answer) {
 		$('#common-dialog-inner').html(answer);
+		$('#common-dialog').modal('show');
 	});
 }
 function propertyVideo(filepath) {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Video Properties',
-		width: 400,
-		height: 410,
-		buttons: {
-			'Close': function () {
-				$(this).dialog('destroy');
-			}
-		}
-	});
+	$('#common-dialog-title').text('Video Properties');
+	$('#common-dialog-footer').html('<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>');
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
 	$.get('tool-property-file.php', { 'filepath': filepath, 'type': 'video' }, function (answer) {
 		$('#common-dialog-inner').html(answer);
+		$('#common-dialog').modal('show');
 	});
 }
 function propertyDir(filepath) {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Directory Properties',
-		width: 400,
-		height: 230,
-		buttons:
-		{
-			'Close': function () {
-				$(this).dialog('destroy');
-			}
-		}
-	});
+	$('#common-dialog-title').text('Directory Properties');
+	$('#common-dialog-footer').html('<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>');
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
 	$.get('tool-property-file.php', { 'filepath': filepath, 'type': 'directory' }, function (answer) {
 		$('#common-dialog-inner').html(answer);
+		$('#common-dialog').modal('show');
 	});
 }
 function showZipContent(filepath) {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Zip Content',
-		width: 400,
-		height: 230,
-		buttons:
-		{
-			'Extract File': function () {
-				extractFile(filepath);
-			},
-			'Close': function () {
-				$(this).dialog('destroy');
-			}
-		}
-	});
+	$('#common-dialog-title').text('Zip Content');
+	let footer = `
+		<button type="button" class="btn btn-primary" onclick="extractFile('${filepath}')">Extract File</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
 	$.get('tool-zip-content.php', { 'filepath': filepath }, function (answer) {
 		$('#common-dialog-inner').html(answer);
+		$('#common-dialog').modal('show');
 	});
 }
 String.prototype.trim = function () // NOSONAR
@@ -699,14 +677,13 @@ function renameFile(filepath, isdir) {
 		else {
 			title = 'Rename File';
 		}
-		$('#common-dialog').dialog({
-			modal: true,
-			title: title,
-			width: 400,
-			height: 200,
-			buttons:
-			{
-				'OK': function () {
+		$('#common-dialog-title').text(title);
+		let footer = `
+			<button type="button" class="btn btn-primary" id="rename-ok">OK</button>
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+		`;
+		$('#common-dialog-footer').html(footer);
+		$('#common-dialog').off('click', '#rename-ok').on('click', '#rename-ok', function () {
 					let dl = $('#fflocation').val();
 					let on = $('#ffoldname').val();
 					let nn = $('#ffnewname').val();
@@ -749,7 +726,7 @@ function renameFile(filepath, isdir) {
 						$.post('tool-file-operation.php?option=renamefile', { 'location': dl, 'oldname': on, 'newname': nn }, function (answer) {
 							if (answer == 'SUCCESS') {
 								openDir(dl);
-								try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+								$('#common-dialog').modal('hide');
 							}
 							else if (answer == 'EXIST') {
 								jqAlert(nn + ' already exists. Please type another name.', 'Invalid Name');
@@ -762,12 +739,8 @@ function renameFile(filepath, isdir) {
 							}
 						});
 					}
-				},
-				'Cancel': function () {
-					$(this).dialog('destroy');
-				}
-			}
 		});
+
 		let html = '' +
 			'<form id="formfilerename" name="form1" method="post" action="">' +
 			'<table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">' +
@@ -786,6 +759,11 @@ function renameFile(filepath, isdir) {
 			'</table>' +
 			'</form>';
 		$('#common-dialog-inner').html(html);
+		let modalDialog = $('#common-dialog .modal-dialog');
+		modalDialog.removeClass('modal-lg modal-sm');
+
+		$('#common-dialog').modal('show');
+
 		$('#fflocation').val(dirname(filepath));
 		$('#ffoldname, #ffnewname').val(basename(filepath));
 		let name = removefileextension($('#ffnewname').val());
@@ -800,17 +778,15 @@ function renameFile(filepath, isdir) {
 
 function compressFile(filepath) {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Compress File',
-		width: 400,
-		height: 175,
-		buttons:
-		{
-			'OK': function () {
-				$('.ui-dialog-buttonpane').append('<div class="wait-status">Plase wait...</div>');
-				$('.ui-dialog-buttonset button:first').attr('disabled', 'disabled');
-				$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'true');
+	$('#common-dialog-title').text('Compress File');
+	let footer = `
+		<button type="button" class="btn btn-primary" id="compress-ok">OK</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#compress-ok').on('click', '#compress-ok', function () {
+				$('#common-dialog-footer').prepend('<div class="wait-status float-left">Plase wait...</div>');
+				$('#compress-ok').attr('disabled', 'disabled');
 				let sf = $('#ffsourcepath').val();
 				let tf = $('#fftargetpath').val();
 				$.post('tool-file-operation.php?option=compressfile', { 'sourcepath[]': sf, 'targetpath': tf }, function (answer) {
@@ -819,27 +795,22 @@ function compressFile(filepath) {
 					}
 					else if (answer == 'SUCCESS') {
 						openDir(dirname(tf));
-						try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+						$('#common-dialog').modal('hide');
 					}
 					else if (answer == 'FAILED') {
 						jqAlert('The operation was failed.', 'Unknown Error Occured');
 					}
 					else if (answer == 'NOTSUPPORTED') {
-						jqAlert('The operation was failed.', 'ZipArchive class not exists. Please verify that php_zip extension is available on this server.');
+						jqAlert('The operation was failed.', 'ZipArchive class not exists. Please verify that php_zip extension is available on this server.'); //NOSONAR
 					}
 					else if (answer == 'READONLY') {
 						jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 					}
-					$('.ui-dialog-buttonpane').find('.wait-status').remove();
-					$('.ui-dialog-buttonset button:first').removeAttr('disabled');
-					$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'false');
+					$('#common-dialog-footer .wait-status').remove();
+					$('#compress-ok').removeAttr('disabled');
 				});
-			},
-			'Cancel': function () {
-				$(this).dialog('destroy');
-			}
-		}
 	});
+
 	let html = '' +
 		'<form id="formfilerename" name="form1" method="post" action="">' +
 		'<table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">' +
@@ -854,6 +825,11 @@ function compressFile(filepath) {
 		'</table>' +
 		'</form>';
 	$('#common-dialog-inner').html(html);
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
+	$('#common-dialog').modal('show');
+
 	$('#ffsourcepath').val(filepath);
 	$('#fftargetpath').val(removefileextension(filepath) + '.zip');
 	let dir = dirname($('#fftargetpath').val());
@@ -874,17 +850,15 @@ function compressSelectedFile() {
 
 	if (chk) {
 		$('#common-dialog-inner').html('');
-		$('#common-dialog').dialog({
-			modal: true,
-			title: 'Compress File',
-			width: 400,
-			height: 260,
-			buttons:
-			{
-				'OK': function () {
-					$('.ui-dialog-buttonpane').append('<div class="wait-status">Plase wait...</div>');
-					$('.ui-dialog-buttonset button:first').attr('disabled', 'disabled');
-					$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'true');
+		$('#common-dialog-title').text('Compress File');
+		let footer = `
+			<button type="button" class="btn btn-primary" id="compress-selected-ok">OK</button>
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+		`;
+		$('#common-dialog-footer').html(footer);
+		$('#common-dialog').off('click', '#compress-selected-ok').on('click', '#compress-selected-ok', function () {
+					$('#common-dialog-footer').prepend('<div class="wait-status float-left">Plase wait...</div>');
+					$('#compress-selected-ok').attr('disabled', 'disabled');
 					let targetpath = $('#fftargetpath').val();
 					let args = 'targetpath=' + encodeURIComponent(targetpath);
 					$('.fileid:checked').each(function (index) {
@@ -893,33 +867,27 @@ function compressSelectedFile() {
 					$.post('tool-file-operation.php?option=compressfile', { 'postdata': args }, function (answer) {
 						if (answer == 'SUCCESS' || answer == 'EXIST') {
 							openDir(dirname(targetpath));
-							try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+							$('#common-dialog').modal('hide');
 						}
 						if (answer == 'CONFLICT') {
 							jqAlert('Please enter another name.', 'Invalid Name');
 						}
 						else if (answer == 'SUCCESS') {
 							openDir(dirname(tf));
-							try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+							$('#common-dialog').modal('hide');
 						}
 						else if (answer == 'FAILED') {
 							jqAlert('The operation was failed.', 'Unknown Error Occured');
 						}
 						else if (answer == 'NOTSUPPORTED') {
-							jqAlert('The operation was failed.', 'ZipArchive class not exists. Please verify that php_zip extension is available on this server.');
+							jqAlert('The operation was failed.', 'ZipArchive class not exists. Please verify that php_zip extension is available on this server.'); //NOSONAR
 						}
 						else if (answer == 'READONLY') {
 							jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 						}
-						$('.ui-dialog-buttonpane').find('.wait-status').remove();
-						$('.ui-dialog-buttonset button:first').removeAttr('disabled');
-						$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'false');
+						$('#common-dialog-footer .wait-status').remove();
+						$('#compress-selected-ok').removeAttr('disabled');
 					});
-				},
-				'Cancel': function () {
-					$(this).dialog('destroy');
-				}
-			}
 		});
 
 		html = '' +
@@ -931,6 +899,11 @@ function compressSelectedFile() {
 			'</table>' +
 			'<div></div><div>File to be compressed:</div><div class="seleted-file-list">' + file2compress + '</div></div>';
 		$('#common-dialog-inner').html(html);
+		let modalDialog = $('#common-dialog .modal-dialog');
+		modalDialog.removeClass('modal-lg modal-sm');
+
+		$('#common-dialog').modal('show');
+
 		let val = 'new-compressed';
 		let i = 1;
 		let dir;
@@ -970,14 +943,13 @@ function moveSelectedFile() {
 	});
 	if (chk) {
 		$('#common-dialog-inner').html('');
-		$('#common-dialog').dialog({
-			modal: true,
-			title: 'Move File',
-			width: 400,
-			height: 260,
-			buttons:
-			{
-				'OK': function () {
+		$('#common-dialog-title').text('Move File');
+		let footer = `
+			<button type="button" class="btn btn-primary" id="move-selected-ok">OK</button>
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+		`;
+		$('#common-dialog-footer').html(footer);
+		$('#common-dialog').off('click', '#move-selected-ok').on('click', '#move-selected-ok', function () {
 					let targetdir = $('#fftargetdir').val();
 					if (dl != targetdir) {
 						let args = 'targetdir=' + encodeURIComponent(targetdir);
@@ -988,24 +960,18 @@ function moveSelectedFile() {
 						$.post('tool-file-operation.php' + q, { 'postdata': args }, function (answer) {
 							if (answer == 'SUCCESS' || answer == 'EXIST') {
 								openDir($('#fftargetdir').val());
-								try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+								$('#common-dialog').modal('hide');
 							}
 							else if (answer == 'READONLY') {
 								jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 							}
-							$('.ui-dialog-buttonpane').find('.wait-status').remove();
-							$('.ui-dialog-buttonset button:first').removeAttr('disabled');
-							$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'false');
+							$('#common-dialog-footer .wait-status').remove();
+							$('#move-selected-ok').removeAttr('disabled');
 						});
 					}
 					else {
 						jqAlert('Please enter another name.', 'Invalid Name');
 					}
-				},
-				'Cancel': function () {
-					$(this).dialog('destroy');
-				}
-			}
 		});
 
 		html = '' +
@@ -1017,6 +983,11 @@ function moveSelectedFile() {
 			'</table>' +
 			'<div></div><div>File to be moved:</div><div class="seleted-file-list">' + file2move + '</div></div>';
 		$('#common-dialog-inner').html(html);
+		let modalDialog = $('#common-dialog .modal-dialog');
+		modalDialog.removeClass('modal-lg modal-sm');
+
+		$('#common-dialog').modal('show');
+
 		$('#fftargetdir').focus();
 		$('#fftargetdir').val(dl);
 	}
@@ -1036,40 +1007,34 @@ function extractFile(filepath) {
 		}
 	}
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Extract File',
-		width: 400,
-		height: 175,
-		buttons:
-		{
-			'OK': function () {
-				$('.ui-dialog-buttonpane').append('<div class="wait-status">Plase wait...</div>');
-				$('.ui-dialog-buttonset button:first').attr('disabled', 'disabled');
-				$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'true');
+	$('#common-dialog-title').text('Extract File');
+	let footer = `
+		<button type="button" class="btn btn-primary" id="extract-ok">OK</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#extract-ok').on('click', '#extract-ok', function () {
+				$('#common-dialog-footer').prepend('<div class="wait-status float-left">Plase wait...</div>');
+				$('#extract-ok').attr('disabled', 'disabled');
 				let filepath = $('#ffsourcename').val();
 				let targetdir = $('#fftargetdir').val();
 				$.post('tool-file-operation.php?option=extractfile', { 'filepath': filepath, 'targetdir': targetdir }, function (answer) {
 					if (answer == 'SUCCESS') {
 						openDir(targetdir);
-						try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+						$('#common-dialog').modal('hide');
 					}
 					else if (answer == 'FAILED') {
 						jqAlert('This is not a Zip file.', 'Invalid Format');
 					}
 					else if (answer == 'NOTSUPPORTED') {
-						jqAlert('The operation was failed.', 'ZipArchive class not exists. Please verify that php_zip extension is available on this server.');
+						jqAlert('The operation was failed.', 'ZipArchive class not exists. Please verify that php_zip extension is available on this server.'); //NOSONAR
 					}
 					else if (answer == 'READONLY') {
 						jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 					}
 				});
-			},
-			'Cancel': function () {
-				$(this).dialog('destroy');
-			}
-		}
 	});
+
 	let html = '' +
 		'<form id="formfilerename" name="form1" method="post" action="">' +
 		'<table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">' +
@@ -1084,19 +1049,24 @@ function extractFile(filepath) {
 		'</table>' +
 		'</form>';
 	$('#common-dialog-inner').html(html);
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
+	$('#common-dialog').modal('show');
+
 	$('#ffsourcename').val(filepath);
 	$('#fftargetdir').val(dirname(filepath));
 }
 function createFile() {
 	let dir = $('#address').val();
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Create New File',
-		width: 400,
-		height: 200,
-		buttons: {
-			'OK': function () {
+	$('#common-dialog-title').text('Create New File');
+	let footer = `
+		<button type="button" class="btn btn-primary" id="create-file-ok">OK</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#create-file-ok').on('click', '#create-file-ok', function () {
 				let dl = $('#fflocation').val();
 				let dn = $('#ffname').val();
 				$.post('tool-file-operation.php?option=createfile', { 'location': dl, 'name': dn }, function (answer) {
@@ -1106,21 +1076,17 @@ function createFile() {
 					}
 					else if (answer == 'SUCCESS') {
 						openDir(dl);
-						try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+						$('#common-dialog').modal('hide');
 					}
 					else if (answer == 'FORBIDDENEXT') {
 						jqAlert('Creating file was aborted because this file name extension is forbidden. Please use another file name extension.', 'Forbidden Extension');
 					}
 					else if (answer == 'READONLY') {
-						jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
+						jqAlert('The operation was disabled on read-only mode.', 'Read-Only'); //NOSONAR
 					}
 				});
-			},
-			'Cancel': function () {
-				$(this).dialog('destroy');
-			}
-		}
 	});
+
 	let html = '' +
 		'<form id="formfilecreate" name="form1" method="post" action="">' +
 		'<table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">' +
@@ -1135,6 +1101,11 @@ function createFile() {
 		'</table>' +
 		'</form>';
 	$('#common-dialog-inner').html(html);
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
+	$('#common-dialog').modal('show');
+
 	$('#fflocation').val(dir);
 	let val = 'new-file';
 	let i = 1;
@@ -1162,33 +1133,28 @@ function createFile() {
 function createDirectory() {
 	let dir = $('#address').val();
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Create Directory',
-		width: 400,
-		height: 200,
-		buttons: {
-			'OK': function () {
+	$('#common-dialog-title').text('Create Directory');
+	let footer = `
+		<button type="button" class="btn btn-primary" id="create-dir-ok">OK</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#create-dir-ok').on('click', '#create-dir-ok', function () {
 				let dl = $('#fflocation').val();
 				let dn = $('#ffname').val();
 				$.post('tool-file-operation.php?option=createdir', { 'location': dl, 'name': dn }, function (answer) {
 					if (answer == 'EXIST') {
 						jqAlert(dl + '/' + dn + ' already exists. Please type another name.');
-						$('#ffname').select();
+						$('#ffname').select(); //NOSONAR
 					}
 					else if (answer == 'SUCCESS') {
 						openDir(dl);
-						try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+						$('#common-dialog').modal('hide');
 					}
 					else if (answer == 'READONLY') {
 						jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 					}
 				});
-			},
-			'Cancel': function () {
-				$(this).dialog('destroy');
-			}
-		}
 	});
 	let html = '' +
 		'<form id="formfilerename" name="form1" method="post" action="">' +
@@ -1204,6 +1170,11 @@ function createDirectory() {
 		'</table>' +
 		'</form>';
 	$('#common-dialog-inner').html(html);
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
+	$('#common-dialog').modal('show');
+
 	$('#fflocation').val(dir);
 	let val = 'new-directory';
 	let i = 1;
@@ -1232,17 +1203,15 @@ function moveFile(filepath, isdir) {
 	else {
 		title = 'Move File';
 	}
-	$('#common-dialog').dialog({
-		modal: true,
-		title: title,
-		width: 400,
-		height: 190,
-		buttons:
-		{
-			'OK': function () {
-				$('.ui-dialog-buttonpane').append('<div class="wait-status">Plase wait...</div>');
-				$('.ui-dialog-buttonset button:first').attr('disabled', 'disabled');
-				$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'true');
+	$('#common-dialog-title').text(title);
+	let footer = `
+		<button type="button" class="btn btn-primary" id="move-file-ok">OK</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#move-file-ok').on('click', '#move-file-ok', function () {
+				$('#common-dialog-footer').prepend('<div class="wait-status float-left">Plase wait...</div>');
+				$('#move-file-ok').attr('disabled', 'disabled');
 				let dl = $('#address').val();
 				let targetdir = $('#ffnewlocation').val();
 				let curlocation = $('#ffcurrentlocation').val();
@@ -1252,21 +1221,16 @@ function moveFile(filepath, isdir) {
 				$.post('tool-file-operation.php' + q, { 'postdata': args }, function (answer) {
 					if (answer == 'SUCCESS' || answer == 'EXIST') {
 						openDir(dl);
-						try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+						$('#common-dialog').modal('hide');
 					}
 					else if (answer == 'READONLY') {
 						jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 					}
-					$('.ui-dialog-buttonpane').find('.wait-status').remove();
-					$('.ui-dialog-buttonset button:first').removeAttr('disabled');
-					$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'false');
+					$('#common-dialog-footer .wait-status').remove();
+					$('#move-file-ok').removeAttr('disabled');
 				});
-			},
-			'Cancel': function () {
-				$(this).dialog('destroy');
-			}
-		}
 	});
+
 	let html = '' +
 		'<form id="formfilemove" name="form1" method="post" action="">' +
 		'<table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">' +
@@ -1285,6 +1249,11 @@ function moveFile(filepath, isdir) {
 		'</table>' +
 		'</form>';
 	$('#common-dialog-inner').html(html);
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
+	$('#common-dialog').modal('show');
+
 	$('#ffpath').val(basename(filepath));
 	$('#ffcurrentlocation').val(dirname(filepath));
 	$('#ffnewlocation').focus();
@@ -1292,24 +1261,21 @@ function moveFile(filepath, isdir) {
 }
 function uploadFile() {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Upload File',
-		width: 600,
-		height: 410,
-		buttons:
-		{
-			'Close': function () {
-				$(this).dialog('destroy');
-			}
-		}
-	});
+	$('#common-dialog-title').text('Upload File');
+	let footer = `
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+
 	let dl = $('#address').val();
 	let html = '' +
 		'<div id="imageuploader">' +
 		'<form method="post" enctype="multipart/form-data" action="tool-upload-file.php?iframe=1" target="formdumper">' +
 		'<input type="hidden" name="targetdir" id="targetdir" value="">' +
-		'File <input type="file" name="file" id="images" />' +
+		'<div class="custom-file">' +
+		'<input type="file" class="custom-file-input" name="file" id="images">' +
+		'<label class="custom-file-label" for="images">Choose file</label>' +
+		'</div>' +
 		'<input type="submit" class="upload-button" value="Upload Files" style="display:none" /> &nbsp; <span id="image-settings-controller"></span>' +
 		'</form><div id="response"></div><ul id="image-list"></ul></div>' +
 		'<iframe style="display:none; width:0px; height:0px;" id="formdumper" name="formdumper"></iframe>' +
@@ -1320,6 +1286,12 @@ function uploadFile() {
 		$('#image-settings-controller').html(answer);
 	});
 
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-sm').addClass('modal-lg');
+	$('#common-dialog').modal('show');
+	$(document).on('change', '.custom-file-input', function() {
+		$(this).next('.custom-file-label').html(this.files[0].name);
+	 });
 	$('#targetdir').val(dl);
 	$.ajax({ type: "GET", url: "js/upload.js", dataType: "script" });
 }
@@ -1328,9 +1300,9 @@ function saveFile(filepath, filecontent, callback) {
 		jqAlert('Please enter a valid file name.', 'Invalid File Name');
 	}
 	else {
-		$('.ui-dialog-buttonpane').append('<div class="wait-status">Plase wait...</div>');
-		$('.ui-dialog-buttonset button:first').attr('disabled', 'disabled');
-		$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'true');
+		$('#common-dialog-footer').prepend('<div class="wait-status float-left">Plase wait...</div>');
+		$('#common-dialog-footer .btn-primary').attr('disabled', 'disabled');
+
 		$.post('tool-edit-file.php?option=savefile', { 'filepath': filepath, 'filecontent': filecontent }, function (answer) {
 			if (answer == 'READONLY') {
 				jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
@@ -1353,9 +1325,8 @@ function saveFile(filepath, filecontent, callback) {
 				}
 				openDir();
 			}
-			$('.ui-dialog-buttonpane').find('.wait-status').remove();
-			$('.ui-dialog-buttonset button:first').removeAttr('disabled');
-			$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'false');
+			$('#common-dialog-footer .wait-status').remove();
+			$('#common-dialog-footer .btn-primary').removeAttr('disabled');
 		});
 	}
 }
@@ -1368,26 +1339,22 @@ function setActiveCompress(val) {
 
 function uploadFileSettings() {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Upload File Settings',
-		width: 420,
-		height: 270,
-		buttons:
-		{
-			'Save': function () {
+	$('#common-dialog-title').text('Upload File Settings');
+	let footer = `
+		<button type="button" class="btn btn-primary" id="upload-settings-save">Save</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#upload-settings-save').on('click', '#upload-settings-save', function () {
 				let args = $('#uploadsetting').serialize();
 				$.post('tool-upload-file-settings.php', { 'save': 'save', 'data': args }, function (answer) {
 				});
-				$(this).dialog('close');
-			},
-			'Cancel': function () {
-				$(this).dialog('destroy');
-			}
-		}
+				$('#common-dialog').modal('hide');
 	});
+
 	$.get('tool-upload-file-settings.php', { 'show-form': '1' }, function (answer) {
 		$('#common-dialog-inner').html(answer);
+		$('#common-dialog').modal('show');
 	});
 
 }
@@ -1405,109 +1372,108 @@ function openFile(filepath) {
 }
 function editFile(filepath) {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Edit Text File',
-		closeOnEscape: false,
-		resizable: true,
-		width: 600,
-		height: 410,
-		buttons:
-		{
-			'Save': function () {
+	$('#common-dialog-title').text('Edit Text File');
+	let footer = `
+		<button type="button" class="btn btn-primary" id="edit-save">Save</button>
+		<button type="button" class="btn btn-success" id="edit-save-close">Save and Close</button>
+		<button type="button" class="btn btn-secondary" id="edit-close">Close without Save</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+
+	$('#common-dialog').off('click', '#edit-save').on('click', '#edit-save', function () {
 				saveFile($('#filepath').val(), $('#filecontent').val());
 				cnt1 = $('#filecontent').val();
-			},
-			'Save and Close': function () {
-				saveFile($('#filepath').val(), $('#filecontent').val(), function () { $('#common-dialog').dialog('destroy'); });
-			},
-			'Close without Save': function () {
+	});
+	$('#common-dialog').off('click', '#edit-save-close').on('click', '#edit-save-close', function () {
+				saveFile($('#filepath').val(), $('#filecontent').val(), function () { $('#common-dialog').modal('hide'); });
+	});
+	$('#common-dialog').off('click', '#edit-close').on('click', '#edit-close', function () {
 				cnt2 = $('#filecontent').val();
 				if (cnt1 != cnt2) {
 					if (confirm('Are you sure you want to close without save?')) {
-						$(this).dialog('destroy');
+						$('#common-dialog').modal('hide');
 					}
 				}
 				else {
-					$(this).dialog('destroy');
+					$('#common-dialog').modal('hide');
 				}
-			}
-		},
-		resize: function (event, ui) {
-			$('#filecontent').css({ 'height': (ui.size.height - 158) + 'px' });
-		}
 	});
-	$('.ui-dialog-titlebar-close').remove();
+
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-sm').addClass('modal-lg');
+
 	$.get('tool-edit-file.php', { 'option': 'openfile', 'filepath': filepath }, function (answer) {
 		$('#common-dialog-inner').html(answer);
 		cnt1 = $('#filecontent').val();
+		$('#common-dialog').modal('show');
+		$('#filecontent').css({ 'height': '400px' });
 	});
 }
 function deleteFile(filepath) {
 	let dl = dirname(filepath);
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Delete File',
-		width: 400,
-		height: 175,
-		buttons:
-		{
-			'OK': function () {
+	$('#common-dialog-title').text('Delete File');
+	let footer = `
+		<button type="button" class="btn btn-danger" id="delete-ok">OK</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#delete-ok').on('click', '#delete-ok', function () {
 				let args = '';
 				args = 'file[]=' + filepath;
 				$.post('tool-file-operation.php?option=deletefile', { 'postdata': args }, function (answer) {
 					if (answer == 'SUCCESS') {
 						openDir(dl);
-						try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+						$('#common-dialog').modal('hide');
 					}
 					else if (answer == 'READONLY') {
 						jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 					}
 				});
-			},
-			'Cancel': function () {
-				$(this).dialog('destroy');
-			}
-		}
 	});
+
 	let html = '' +
 		'<div>Are you sure to delete this file:<br />' + filepath + '</div>';
 	$('#common-dialog-inner').html(html);
-	$('.ui-dialog-buttonset button:last').focus();
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+	$('#common-dialog').modal('show');
+	$('#common-dialog').on('shown.bs.modal', function () {
+		$('#delete-ok').focus();
+	})
 }
 function deleteDirectory(filepath) {
 	let dl = $('#address').val();
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Delete Directory',
-		width: 400,
-		height: 175,
-		buttons:
-		{
-			'OK': function () {
+	$('#common-dialog-title').text('Delete Directory');
+	let footer = `
+		<button type="button" class="btn btn-danger" id="delete-dir-ok">OK</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#delete-dir-ok').on('click', '#delete-dir-ok', function () {
 				let args = '';
 				args = 'file[]=' + filepath;
 				$.post('tool-file-operation.php?option=deletefile', { 'postdata': args }, function (answer) {
 					if (answer == 'SUCCESS') {
 						openDir(dl);
-						try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+						$('#common-dialog').modal('hide');
 					}
 					else if (answer == 'READONLY') {
 						jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 					}
 				});
-			},
-			'Cancel': function () {
-				$(this).dialog('destroy');
-			}
-		}
 	});
+
 	let html = '' +
 		'<div>Are you sure to delete this directory including its content:<br />' + filepath + '</div>';
 	$('#common-dialog-inner').html(html);
-	$('.ui-dialog-buttonset button:last').focus();
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+	$('#common-dialog').modal('show');
+	$('#common-dialog').on('shown.bs.modal', function () {
+		$('#delete-dir-ok').focus();
+	})
 }
 function deleteSelectedFile() {
 	let dl = $('#address').val();
@@ -1522,32 +1488,29 @@ function deleteSelectedFile() {
 	});
 	if (chk) {
 		$('#common-dialog-inner').html('');
-		$('#common-dialog').dialog({
-			modal: true,
-			title: 'Delete File',
-			width: 400,
-			height: 250,
-			buttons:
-			{
-				'OK': function () {
+		$('#common-dialog-title').text('Delete File');
+		let footer = `
+			<button type="button" class="btn btn-danger" id="delete-selected-ok">OK</button>
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+		`;
+		$('#common-dialog-footer').html(footer);
+		$('#common-dialog').off('click', '#delete-selected-ok').on('click', '#delete-selected-ok', function () {
 					$.post('tool-file-operation.php?option=deletefile', { 'postdata': args }, function (answer) {
 						if (answer == 'SUCCESS') {
 							openDir(dl);
-							try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+							$('#common-dialog').modal('hide');
 						}
 						else if (answer == 'READONLY') {
 							jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 						}
 					});
-				},
-				'Cancel': function () {
-					$(this).dialog('destroy');
-				}
-			}
 		});
 		html = '<div>Are you sure to delete file/s:</div><div class="seleted-file-list">' + file2del + '</div></div>';
 		$('#common-dialog-inner').html(html);
-		$('.ui-dialog-buttonset button:last').focus();
+		$('#common-dialog').modal('show');
+		$('#common-dialog').on('shown.bs.modal', function () {
+			$('#delete-selected-ok').focus();
+		})
 	}
 	else {
 		jqAlert('No file selected.', 'Invalid Operation');
@@ -1610,13 +1573,13 @@ let clipboardfile = { 'operation': '', 'content': [] };
 
 function transferFile() {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Transfer File',
-		width: 400,
-		height: 240,
-		'buttons': {
-			'Get File': function () {
+	$('#common-dialog-title').text('Transfer File');
+	let footer = `
+		<button type="button" class="btn btn-primary" id="transfer-get">Get File</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#transfer-get').on('click', '#transfer-get', function () {
 				let sourcefile = $('#source').val();
 				let targetlocation = $('#target').val();
 				let targetname = $('#filename').val();
@@ -1628,15 +1591,10 @@ function transferFile() {
 						jqAlert('Transfer file failed.', 'Failed');
 					}
 					else {
-						try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+						$('#common-dialog').modal('hide');
 						openDir(targetlocation);
 					}
 				});
-			},
-			'Cancle': function () {
-				try { $('#common-dialog').dialog('destroy'); } catch (e) { }
-			}
-		}
 	});
 
 	let html = '<form name="form1" method="post" action="">' +
@@ -1655,6 +1613,11 @@ function transferFile() {
 		'</table>' +
 		'</form>';
 	$('#common-dialog-inner').html(html);
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+
+	$('#common-dialog').modal('show');
+
 	let targetlocation = $('#address').val();
 	$('#target').val(targetlocation);
 	$('#source').on('change', function () {
@@ -1801,18 +1764,15 @@ function emptyClipboard() {
 }
 function showClipboard() {
 	$('#common-dialog-inner').html('');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Clipboard Content',
-		width: 400,
-		height: 230,
-		buttons:
-		{
-			'Close': function () {
-				$(this).dialog('destroy');
-			}
-		}
-	});
+	$('#common-dialog-title').text('Clipboard Content');
+	let footer = `
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-lg modal-sm');
+	$('#common-dialog').modal('show');
+
 	let html = '<div>File Operation: &quot;' + clipboardfile.operation + '&quot;; ' +
 		'Number of File: ' + clipboardfile.content.length + '</div>' +
 		'<div class="seleted-file-list">' + clipboardfile.content.join('<br />') + '</div>' +
@@ -1867,42 +1827,36 @@ function changePermission(filepath) {
 		+ '    </tr>'
 		+ '</tbody>'
 		+ '</table>');
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Set Permission',
-		width: 400,
-		height: 250,
-		buttons:
-		{
-			'Change': function () {
+	$('#common-dialog-title').text('Set Permission');
+	let footer = `
+		<button type="button" class="btn btn-primary" id="permission-change">Change</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	`;
+	$('#common-dialog-footer').html(footer);
+	$('#common-dialog').off('click', '#permission-change').on('click', '#permission-change', function () {
 				if (data.length == 0) {
 					jqAlert('No file selected.', 'Invalid Operation');
 				}
 				else {
-					$('.ui-dialog-buttonpane').append('<div class="wait-status">Plase wait...</div>');
-					$('.ui-dialog-buttonset button:first').attr('disabled', 'disabled');
-					$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'true');
+					$('#common-dialog-footer').prepend('<div class="wait-status float-left">Plase wait...</div>');
+					$('#permission-change').attr('disabled', 'disabled');
 					let rec = $('#recursive:checked').val();
 					let perms = $('#file-permission').val();
 					$.post('tool-file-operation.php?option=change-perms', { 'recursive': rec, 'perms': perms, 'data': data }, function (answer) {
 						if (answer == 'SUCCESS') {
-							try { $('#common-dialog').dialog('destroy'); } catch (e) { }
+							$('#common-dialog').modal('hide');
 							openDir();
 						}
 						else if (answer == 'READONLY') {
 							jqAlert('The operation was disabled on read-only mode.', 'Read-Only');
 						}
-						$('.ui-dialog-buttonpane').find('.wait-status').remove();
-						$('.ui-dialog-buttonset button:first').removeAttr('disabled');
-						$('.ui-dialog-buttonset button:first').attr('aria-disabled', 'false');
+						$('#common-dialog-footer .wait-status').remove();
+						$('#permission-change').removeAttr('disabled');
 					});
 				}
-			},
-			'Close': function () {
-				$(this).dialog('destroy');
-			}
-		}
 	});
+	$('#common-dialog').modal('show');
+
 	if (!filepath) {
 		if ($('.fileid[data-isdir=true]:checked').length == 0) {
 			$('#recursive-control').remove();
@@ -1956,7 +1910,7 @@ function editImage(fp) {
 	let wheight = $(window).height();
 	// create layer
 	let html = '<div id="image-editor-layer"></div>';
-	$('#all').append(html);
+	$('body').append(html);
 	$('#image-editor-layer').css({ 'width': 0 + 'px', 'height': 0 + 'px' });
 	$.get('tool-image-editor-form.php', { 'filepath': fp }, function (answer) {
 		$('#image-editor-layer').html(answer);
@@ -2439,13 +2393,15 @@ function searchFile() {
 	let width = $('body').width() - 14;
 	let height = $('body').height() - 14;
 	let hr = height - 136;
+	
+	$('#common-dialog-title').text('Search File');
+	$('#common-dialog-footer').html(''); // No footer for search
 
-	$('#common-dialog').dialog({
-		modal: true,
-		title: 'Search File',
-		width: width,
-		height: height
-	});
+	let modalDialog = $('#common-dialog .modal-dialog');
+	modalDialog.removeClass('modal-sm').addClass('modal-lg');
+	modalDialog.css('max-width', '95%');
+	$('#common-dialog').modal('show');
+
 	$('#common-dialog-inner').html(html);
 	$('.search-result').css({ 'height': hr + 'px', 'overflow': 'auto' });
 	$(document).on('keyup', '#sfile', function () {
@@ -2485,31 +2441,22 @@ function filterFile(name) {
 
 function initEXIF() {
 	$(document).on('click', '.capture-info', function () {
-		try { $('#exif-dialog').dialog('destroy'); } catch (e) { }
-		$('#exif-dialog').remove();
-		$('#dialogs').append('<div id="exif-dialog"><div id="exif-dialog-inner"></div></div>');
 		let jsdata = eval(decodeURIComponent($(this).attr('data-exif')));
 		let key;
 		let obj = jsdata[0];
-		let html = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="row-table exif-table">';
+		let html = '<table width="100%" border="0" cellspacing="1" cellpadding="2" class="table table-sm table-bordered exif-table">';
 		html += '<tbody>';
 		for (key in obj) {
 			html += '<tr><td width="50%">' + key + '</td><td>' + obj[key] + '</td></tr>';
 		}
 		html += '</tbody></table>';
-		$('#exif-dialog-inner').html(html);
-		$('#exif-dialog').dialog({
-			resizable: false,
-			modal: true,
-			title: 'Capture Information',
-			width: 400,
-			height: 410,
-			buttons: {
-				'Close': function () {
-					$('#exif-dialog').dialog('destroy');
-				}
-			}
-		});
+		$('#common-dialog-inner').html(html);
+		$('#common-dialog-title').text('Capture Information');
+		let footer = `<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>`;
+		$('#common-dialog-footer').html(footer);
+		let modalDialog = $('#common-dialog .modal-dialog');
+		modalDialog.removeClass('modal-lg modal-sm');
+		$('#common-dialog').modal('show');
 	});
 }
 
