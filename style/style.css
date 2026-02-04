@@ -137,6 +137,11 @@ input[type=file] {
 	width: 240px;
 }
 
+td > .input-text{
+	width: 100%;
+	box-sizing: border-box;
+}
+
 .address-bar tr td:nth-child(2) {
 	width: 80px;
 }
@@ -1153,4 +1158,26 @@ input[type=file] {
 	white-space: nowrap;
 	line-height: 1.5;
 	height: 24px;
+}
+
+#overlay-container{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+}
+
+.ui-widget-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+}
+
+#overlay-inner{
+    position:relative;
+    z-index:2;
+    padding:10px;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
 }
