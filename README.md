@@ -247,4 +247,7 @@ You can also integrate authentication mechanisms or restrict access based on use
 **Planetbiru Team**
 Developed and maintained by [Kamshory](https://github.com/kamshory)
 
+## 🔐 Default User
 
+Username: `user`
+Password: `password`
