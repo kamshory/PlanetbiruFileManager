@@ -115,8 +115,11 @@ input[type=file] {
 	color: #069;
 }
 
+.btn-toolbar{
+	padding: 8px 8px 0px 8px;
+}
 .addressbar {
-	padding: 4px 6px;
+	padding: 4px 8px;
 	background-color: #F6F6F6;
 	border-bottom: 1px solid #DDDDDD;
 }
