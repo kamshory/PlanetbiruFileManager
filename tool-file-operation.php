@@ -206,7 +206,7 @@ if (@$_GET['option'] == 'compressfile') {
 		}
 	}
 
-
+	$file_list = "";
 
 	$file2compress = @$_POST['sourcepath'];
 	if (is_array($file2compress)) {
