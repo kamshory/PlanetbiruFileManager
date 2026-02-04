@@ -15,7 +15,7 @@ if (@$_GET['type'] == 'directory') {
     $fileperms = substr(sprintf('%o', fileperms($filename)), -4);
   }
 ?>
-  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-sm">
     <tr>
       <td width="30%">Directory Name</td>
       <td>
@@ -36,7 +36,7 @@ if (@$_GET['type'] == 'directory') {
     </tr>
     <tr>
       <td>Permission</td>
-      <td><span class="permission-info"><?php echo $fileperms; ?></span></td>
+      <td><span class="permission-info badge badge-info"><?php echo $fileperms; ?></span></td>
     </tr>
   </table>
 <?php
@@ -130,7 +130,7 @@ if (@$_GET['type'] == 'directory') {
   }
   $url = $cfg->rooturl . '/' . substr(PlanetbiruFileManager::path_encode($filename, $cfg->rootdir), 5);
 ?>
-  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-sm">
     <tr>
       <td width="30%">File Name</td>
       <td>
@@ -191,7 +191,7 @@ if (@$_GET['type'] == 'directory') {
     </tr>
     <tr>
       <td>Permission</td>
-      <td><span class="permission-info"><?php echo $fileperms; ?></span></td>
+      <td><span class="permission-info badge badge-info"><?php echo $fileperms; ?></span></td>
     </tr>
   </table>
 <?php
@@ -207,7 +207,7 @@ if (@$_GET['type'] == 'directory') {
   }
   $url = $cfg->rooturl . '/' . substr(PlanetbiruFileManager::path_encode($filename, $cfg->rootdir), 5);
 ?>
-  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="dialog-table">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-sm">
     <tr>
       <td width="30%">File Name</td>
       <td>
@@ -240,7 +240,7 @@ if (@$_GET['type'] == 'directory') {
     </tr>
     <tr>
       <td>Permission</td>
-      <td><span class="permission-info"><?php echo $fileperms; ?></span></td>
+      <td><span class="permission-info badge badge-info"><?php echo $fileperms; ?></span></td>
     </tr>
   </table>
 <?php

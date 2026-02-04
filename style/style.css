@@ -23,6 +23,11 @@ body {
 	overflow: hidden;
 }
 
+#wrapper{
+	padding-left: 0;
+	padding-right: 0;
+}
+
 form {
 	margin: 0px;
 	padding: 0px;
@@ -51,28 +56,23 @@ input[type=file] {
 	background-image: -o-linear-gradient(#FEFEFE, #EEEEEE);
 	background-image: linear-gradient(#FEFEFE, #EEEEEE);
 	border-bottom: 1px solid #DDDDDD;
-	padding: 5px 6px;
-	height: 26px;
-	overflow: hidden;
+	padding: 0 0;
 }
 
 .toolbar-inner-anim {
 	background: url(images/loading.gif) no-repeat right center;
 	padding: 0px 0px;
-	height: 26px;
 }
 
 .toolbar ul {
 	margin: 0px;
 	padding: 0px;
-	float: left;
 	margin-right: 6px;
 }
 
 .toolbar li {
 	margin: 0px;
 	padding: 0px;
-	float: left;
 	list-style-type: none;
 }
 
@@ -115,8 +115,11 @@ input[type=file] {
 	color: #069;
 }
 
+.btn-toolbar{
+	padding: 8px 8px 0px 8px;
+}
 .addressbar {
-	padding: 4px 6px;
+	padding: 4px 8px;
 	background-color: #F6F6F6;
 	border-bottom: 1px solid #DDDDDD;
 }
@@ -132,6 +135,11 @@ input[type=file] {
 	-moz-box-shadow: 0px 0px 1px #DDDDDD;
 	-webkit-box-shadow: 0px 0px 1px #DDDDDD;
 	width: 240px;
+}
+
+td > .input-text{
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .address-bar tr td:nth-child(2) {
@@ -225,26 +233,24 @@ input[type=file] {
 }
 
 .directory-area {
-	width: 200px;
-	float: left;
-}
-
-.file-area {
-	margin-left: 208px;
+	/* Styles moved to Bootstrap grid */
 }
 
 .directory-area,
 .file-area {
 	overflow: auto;
-	background-color: #FFFFFF;
-	border: 1px solid #DDDDDD;
-	box-shadow: 0px 0px 1px #DDDDDD;
-	-moz-box-shadow: 0px 0px 1px #DDDDDD;
-	-webkit-box-shadow: 0px 0px 1px #DDDDDD;
+	border-right: 1px solid #ddd;
 }
 
 .file-area-hover {
 	background-color: #FAFAFA;
+}
+
+.fileicon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
 }
 
 
@@ -355,20 +361,24 @@ input[type=file] {
 	margin-left: 18px;
 }
 
+#file-container {
+	padding: 8px;
+}
+
 #file-container a {
 	color: #444444;
 	text-decoration: none;
 }
 
 .tool-thumb img,
-.toolbar-inner ul img,
+.toolbar-inner .btn img,
 .file-function a,
 .image-editor-tool-item a {
 	background-repeat: no-repeat;
 	background-image: url(images/merged.gif);
 }
 
-.toolbar-inner ul .inactive img {
+.toolbar-inner .btn.inactive img {
 	background-repeat: no-repeat;
 	background-image: url(images/merged2.gif);
 }
@@ -727,6 +737,7 @@ input[type=file] {
 
 .thumbimage {
 	background: no-repeat 0px 0px;
+	height: 96px;
 }
 
 .thumbimage img {
@@ -1147,4 +1158,26 @@ input[type=file] {
 	white-space: nowrap;
 	line-height: 1.5;
 	height: 24px;
+}
+
+#overlay-container{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+}
+
+.ui-widget-overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+}
+
+#overlay-inner{
+    position:relative;
+    z-index:2;
+    padding:10px;
+    box-shadow:0 0 20px rgba(0,0,0,0.4);
 }
